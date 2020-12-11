@@ -51,6 +51,7 @@ cortar <- function(x, breaks, open_left = T, open_right = F, dig_lab = 3){
 #' @param df a tibble 
 #' @param variable a scalar character 
 #' @param rotulo a label for the distribution table
+#' @param na_rm remove rows with NA values
 #' 
 #' @return a tibble that is distribution table
 #' 
@@ -62,12 +63,20 @@ cortar <- function(x, breaks, open_left = T, open_right = F, dig_lab = 3){
 #'                           prob = c(0.6, 0.2, 0.2)),
 #'            numero = rnorm(n))
 #'table_distribution(df, 'nome', 'Nome')
-table_distribution <- function(df, variable, rotulo) {
+table_distribution <- function(df, variable, rotulo, na_rm = TRUE) {
   
   suppressWarnings({
-    tab <- df %>%
+    
+    
+    if(na_rm) {
+      df_clean <- df %>% filter(.[[variable]]  != "")
+    } else {
+      df_clean <- df 
+    }
+
+    tab <- df_clean %>%
       group_by_(variable) %>%
-      summarise(frequencia = n()) %>% 
+      summarise(frequencia = n(), .groups = 'drop') %>% 
       mutate(frequencia_relativa = frequencia / sum(frequencia),
              porcentagem = frequencia_relativa * 100) %>%
       arrange(desc(porcentagem))
@@ -102,6 +111,7 @@ table_distribution <- function(df, variable, rotulo) {
 #' @param df a tibble 
 #' @param variable a scalar character 
 #' @param rotulo label of y axis
+#' @param na_rm remove rows with NA values
 #' 
 #' @return a tibble that is distribution table
 #' 
@@ -113,12 +123,20 @@ table_distribution <- function(df, variable, rotulo) {
 #'                           prob = c(0.6, 0.2, 0.2)),
 #'            numero = rnorm(n))
 #'table_distribution(df, 'nome', 'Nome')
-grafico <- function(df, variable, rotulo) {
-  df %>% 
-    ggplot(aes_string(x = variable)) +
-    geom_bar(aes(y = ..prop.. * 100, group = 1), fill = "blue") +
-    labs(x = rotulo, y = "Porcentagem") +
-    theme(axis.title = element_text(size = 20),
-          axis.text = element_text(size = 15)) 
+grafico <- function(df, variable, rotulo, na_rm = TRUE) {
+
+  if(na_rm) {
+    df_clean <- df %>% filter(.[[variable]] != "")
+  } else {
+    df_clean <- df 
+  }
+  
+  
+    df_clean %>%
+      ggplot(aes_string(x = variable)) +
+      geom_bar(aes(y = ..prop.. * 100, group = 1), fill = "blue") +
+      labs(x = rotulo, y = "Porcentagem") +
+      theme(axis.title = element_text(size = 20),
+            axis.text = element_text(size = 15)) 
   
 }

@@ -127,6 +127,24 @@ table_distribution(dados %>% filter(idade != ''), 'idade', 'Idade')
 
 ```
 
+### Medidas de resumo para Idade
+
+```{r, fig.align='center'}
+df <- dados %>% 
+  filter(idade != '') %>% 
+  mutate(idade = recode(idade,
+                        '45 a 59 anos.' = '52',
+                        '35 a 44 anos.' = '39.5',
+                        '60 a 70 anos.' = '65',
+                        '21 a 34 anos.' = '27.5',
+                        'Acima dos 70 anos.' = '70') %>% as.numeric()) 
+
+df %>%
+  summarise(`Idade média` = mean(idade), `Idade mediana` = median(idade), `Desvio Padrão` = sd(idade), `Coeficiente de variação` = `Desvio Padrão` / `Idade média`) %>% 
+  knitr::kable(digits = 2, format = 'pipe', format.args = list(decimal.mark = ','), align = 'c')
+```
+
+
 ### Gráfico de barras para Idade
 
 ```{r, fig.align='center'}
@@ -178,16 +196,18 @@ grafico(dados %>% filter(estado != ''), 'estado', 'Estado') +
 
 ## Rede de ensino
 
+Seis docentes nao informaram se já tiveram experiência na rede de ensino básica.
+
 ### Tabela de distribuição de frequência para Rede de ensino
 
 ```{r}
-table_distribution(dados, 'rede_ensino', 'Rede de ensino')
+table_distribution(dados %>% filter(rede_ensino != ''), 'rede_ensino', 'Rede de ensino')
 ```
 
 ### Gráfico de barras para Rede de ensino
 
 ```{r}
-grafico(dados, 'rede_ensino', 'Rede de ensino') +
+grafico(dados %>% filter(rede_ensino != ''), 'rede_ensino', 'Rede de ensino') +
   scale_y_continuous(breaks = seq(from = 0, to = 50, by = 10)) +
   coord_flip()
 ```
@@ -196,16 +216,18 @@ grafico(dados, 'rede_ensino', 'Rede de ensino') +
 
 ## Escolaridade do pai
 
+Retirei dois professores na análise dessa variável, pois eles responderam a escolaridade dos pais.
+
 ### Tabela de distribuição de frequência para a Escolaridade do pai
 
 ```{r}
-table_distribution(dados, 'escolaridade_pai', 'Escolaridade do pai')
+table_distribution(dados %>% filter(escolaridade_pai != ''), 'escolaridade_pai', 'Escolaridade do pai')
 ```
 
 ### Gráfico de barras para Escolaridade do pai
 
 ```{r}
-grafico(dados, 'escolaridade_pai', 'Escolaridade do pai') +
+grafico(dados %>% filter(escolaridade_pai != ''), 'escolaridade_pai', 'Escolaridade do pai') +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5)) +
   coord_flip()
 ```
@@ -214,17 +236,18 @@ grafico(dados, 'escolaridade_pai', 'Escolaridade do pai') +
 
 ## Escolaridade da mãe
 
+Retirei três professores na análise da variável, pois eles não responderam a escolaridade da mãe.
 
 ### Tabela de distribuição de frequência para a Escolaridade da mãe
 
 ```{r}
-table_distribution(dados, 'escolaridade_mae', 'Escolaridade da mãe')
+table_distribution(dados %>% filter(escolaridade_mae != ''), 'escolaridade_mae', 'Escolaridade da mãe')
 ```
 
 ### Gráfico de barras para a Escolaridade da mãe
 
 ```{r}
-grafico(dados, 'escolaridade_mae', 'Escolaridade da mãe') +
+grafico(dados %>% filter(escolaridade_mae != ''), 'escolaridade_mae', 'Escolaridade da mãe') +
   scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5)) +
   coord_flip()
 ```
@@ -232,6 +255,8 @@ grafico(dados, 'escolaridade_mae', 'Escolaridade da mãe') +
 \cleardoublepage
 
 ## Raça
+
+Retirei três professores que não informaram a sua raça.
 
 ### Tabela de distribuição de frequência para Raça
 
@@ -251,6 +276,8 @@ grafico(dados, 'raca', 'Raça') +
 
 ## Domicílio
 
+Retirei os quatro docentes que não informaram a condição do Domicílio.
+
 ### Tabela de distribuição de frequência para a Condição do domicílio
 
 ```{r}
@@ -269,6 +296,8 @@ grafico(dados, 'domicilio', 'Condição do domicílio') +
 
 ## Filhos
 
+Retirei quatro professores que não responderam a questão número de filhos.
+
 ### Tabela de distribuição de frequência para o número de filhos
 
 ```{r}
@@ -281,7 +310,10 @@ table_distribution(dados, 'filhos', 'Filhos')
 dados %>%
   mutate(n_filhos = recode(filhos,
          '0 (tem filhos, mas não mora)' = '0',
-         'Não tenho filho/a.' = '1') %>% as.numeric()) %>%
+         'Não tenho filho/a.' = '1',
+         'Acima de 5.' = '5')) %>%
+  filter(n_filhos != '') %>%
+  mutate(n_filhos = as.numeric(n_filhos)) %>% 
   summarize(`Número médio de filhos` = mean(n_filhos),
             `Número mediano de filhos` = median(n_filhos),
             `Desvio padrão` = sd(n_filhos)) %>%
@@ -365,11 +397,37 @@ grafico(dados, 'campus', 'Campus') +
 
 ## Distância do trabalho
 
+Retirei cinco professores que não informaram a distância do trabalho.
+
 ### Tabela de distribuição de frequência para Distância do trabalho
 
 ```{r}
 table_distribution(dados, 'Qual.a.estimativa.de.distância.entre.a.sua.moradia.e.o.local.de.trabalho.', 'Distância do trabalho')
 ```
+
+### Medidas de resumo para Distância do trabalho
+
+```{r}
+df <- dados %>% 
+  rename('distancia_trabalho' = 'Qual.a.estimativa.de.distância.entre.a.sua.moradia.e.o.local.de.trabalho.') 
+
+df <- df %>% 
+  mutate(distancia_trabalho = recode(distancia_trabalho,
+                                     '1-5 km.' = '3',
+                                     '5-15 km' = '10',
+                                     '15-30 km.' = '22.5',
+                                     'Acima dos 50 km.' = '50',
+                                     'Até 1 km.' = '1',
+                                     '30-50 km.' = '40') ) %>% 
+  filter(distancia_trabalho != '') %>% 
+  mutate(distancia_trabalho = as.numeric(distancia_trabalho))
+
+df %>% summarise(`Distância média do trabalho` = mean(distancia_trabalho),
+                 `Distância mediana do trabalho` = median(distancia_trabalho),
+                 `Desvio padrão` = sd(distancia_trabalho),
+                 `Coeficiente de variação` = `Desvio padrão` / `Distância média do trabalho`)
+```
+
 
 ### Gráfico de barras para Distância do Trabalho
 
@@ -411,6 +469,8 @@ grafico(dados, 'Você.recebe.remuneração.de.qual.regime.de.trabalho..', 'Regim
 
 ## Estágio na carreira
 
+Um professor não informou qual o estágio na carreira e foi removido para esta questão.
+
 ### Tabela de distribuição de frequência para Estágio na Carreira
 
 ```{r}
@@ -428,6 +488,8 @@ grafico(dados, 'carreira', 'Estágio na carreira') +
 \cleardoublepage
 
 ## Experiência no ensino básico público
+
+
 
 ### Tabela de distribuição de frequência para Experiência no ensino básico público
 
@@ -651,6 +713,8 @@ ggplot(df_antes_pandemia) +
 
 ## Satisfação com UFBA
 
+Aqui retirei 41 professores que não responderam ou que responderam **Não se Aplica (NSA)**.
+
 ### Tabela de distribuição de frequência para Satistação com UFBA
 
 ```{r}
@@ -674,6 +738,8 @@ grafico(tab, 'satisfacao_ufba', 'Satisfação com UFBA') +
 
 ## Maior insatisfação
 
+Retirei 24 professores que não informaram a maior insatisfação com a UFBA.
+
 ### Tabela de distribuição de frequência para Maior insatisfação
 
 ```{r}
@@ -691,6 +757,8 @@ grafico(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA') +
 \cleardoublepage
 
 ## Estresse nas relações interpessoais
+
+Retirei 28 professores que não responderam ou que responderam **Não se Aplica (NSA).**
 
 ### Tabela de distribuição de frequência para Estresse nas relações interpessoais
 
@@ -713,6 +781,8 @@ grafico(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações interpe
 
 ## Acompanhamento psicológico ou psiquiátrico
 
+Retirei 20 professores que não responderam essa questão.
+
 ### Tabela de distribuição de frequência para Acompanhamento psicológico ou psiquiátrico
 
 ```{r}
@@ -731,6 +801,8 @@ grafico(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológic
 
 ## Plano de saúde
 
+Retirei 20 professores que não responderam esse campo.
+
 ### Tabela de distribuição de frequência para Plano de saúde
 
 ```{r}
@@ -748,6 +820,8 @@ grafico(dados, 'plano_saude', 'Plano de saúde') +
 
 ## Carga horária excessiva
 
+24 professores não responderam esse campo e foram removidos neste campo.
+
 ### Tabela de distribuição de frequência para Carga horária excessiva
 
 ```{r}
@@ -757,7 +831,8 @@ table_distribution(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
 ### Gráfico de barras para Carga horária excessiva
 
 ```{r}
-grafico(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
+grafico(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')+
+  scale_y_continuous(breaks = seq(from = 0, to = 70, by = 10))
 
 ```
 
@@ -765,11 +840,38 @@ grafico(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
 
 ## Renda mensal familiar
 
+Retirei 21 professores que não informaram a renda mensal familiar.
+
 ### Tabela de distribuição para Renda mensal familiar
 
 ```{r}
 table_distribution(dados, 'Qual.a.sua.renda.familiar.', 'Renda mensal familiar')
 ```
+
+### Medidas de resumo para Renda mensal familiar
+
+```{r}
+df <- dados %>% 
+  rename('renda_familiar' = 'Qual.a.sua.renda.familiar.') %>% 
+  mutate(renda_familiar = recode(renda_familiar, 
+                                 'Entre R$ 10.448,01 e R$ 20.896,00' = '15672.01',
+                                 'Entre R$ 6.101,07 e R$ 10.448,00' = '8274.54',
+                                 'Entre R$ 20.896,01 e R$ 40.747,20' = '30821.61',
+                                 'Entre R$ 3.134,41 e R$ 6.101,06' = '4617.74',
+                                 'Acima de R$ 40.747,21' = '50000',
+                                 'Entre R$ 2.089,61 e R$ 3.134,40' = '2612.01')) %>%
+  mutate(renda_familiar = as.numeric(renda_familiar)) %>% 
+  filter(!is.na(renda_familiar))
+
+df %>% 
+  summarise(`Renda média familiar` = mean(renda_familiar),
+            `Renda mediana familiar` = median(renda_familiar),
+            `Desvio padrão` = sd(renda_familiar),
+            `Coeficiente de variação` = `Desvio padrão` / `Renda média familiar`) %>% 
+  knitr::kable(align = 'c', format = 'pipe', digits = 2, format.args = list(decimal.mark = ','))
+
+```
+
 
 ### Gráfico de barras para Renda mensal familiar
 
