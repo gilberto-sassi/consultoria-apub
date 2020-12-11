@@ -1,0 +1,816 @@
+---
+title: "Análise inicial -- APUB"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    number_section: false
+editor_options: 
+  chunk_output_type: console
+---
+
+## Pacotes usados
+
+```{r,  message=FALSE}
+library(readxl)
+library(readr)
+library(openxlsx)
+library(tidyverse)
+
+theme_set(theme_minimal())
+
+source('generic.R')
+```
+
+## Carregando os dados
+
+1. Mantive apenas as pessoas com vínculo nas universidades federais.
+2. Retirei os docentes que não responderam se estão ativos ou aposentados (campo 15).
+3. Retirei os docentes que não responderam o regime de trabalho (20, 40 ou DE).
+
+
+```{r, echo=TRUE}
+dados <- read.csv("resultados.csv")
+
+## filtrando os campos 15 e 16
+dados <- dados[2:nrow(dados), ] %>% 
+  filter(Qual.o.seu.vínculo.com.a.Universidade. != '') %>% 
+  filter(Você.recebe.remuneração.de.qual.regime.de.trabalho.. != '')
+  
+dados <- dados[2:nrow(dados), ] %>% 
+  rename(vinculo = Qual.a.rede.pública.federal.de.ensino.você.faz.parte..) %>% 
+  rename(idade = Qual.a.sua.idade..) %>% 
+  rename(genero = Gênero.com.o.qual.você.se.identifica.) %>% 
+  rename(estado = `Se.você.nasceu.no.Brasil..em.qual.Estado.`) %>% 
+  rename(rede_ensino = `Você.estudou.em.Rede.Pública.ou.Rede.Privada.nos.Ensinos.Fundamental.e.Médio.`) %>% 
+  rename(escolaridade_pai = `Qual.o.nível.de.escolaridade.alcançado.por.seu.pai.`) %>% 
+  rename(escolaridade_mae = `Qual.o.nível.de.escolaridade.alcançado.por.sua.mãe.`) %>% 
+  rename(raca = `De.acordo.com.os.critérios.estabelecidos.pelo.IBGE..como.você.se.reconhece.em.termos.de.cor.ou.raça.`) %>% 
+  rename(domicilio = `Qual.a.condição.de.domicílio.em.que.você.vive.`) %>% 
+  rename(filhos = `Você.tem.filhos..Se.sim..quantos.morando.com.você.`) %>% 
+  mutate(titulacao = seq_along(`Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.obtidos.por.você.`) %>% 
+           map_chr(function(i) {
+             valor <- ""
+             if (X.3[i] != 'Nenhum.') {
+               valor <- 'Pós-doutorado'
+             } else if (X.2[i] != 'Nenhum.') {
+               valor <- 'Doutorado'
+             } else if (X.1[i] != 'Nenhum.') {
+               valor <- 'Mestrado'
+             } else if (X[i] != 'Nenhum.') {
+               valor <- 'Especialização'
+             } else if (`Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.obtidos.por.você.`[i] != 'Nenhum.') {
+               valor <- 'Apenas graduação'
+             } else {
+               valor <- 'Não tem ensino superior'
+             }
+             valor
+           })) %>% 
+  rename(campus = `De.qual.Universidade.e.Campus.você.faz.parte..lotação....Incluindo.os.as.Aposentados.as.`) %>% 
+  rename(carreira = `Em.qual.estágio.você.se.encontra.na.carreira..classe.nível....INCLUINDO.OS.AS.APOSENTADOS.AS.`) %>% 
+  mutate(carreira = recode(carreira,
+                           'Classe D - Professor Associado [níveis 1, 2, 3 e 4]' = 'Classe D',
+                           'Classe A - Professor Auxiliar, Professor Assistente A ou Professor Adjunto A (depende da titulação) - [níveis 1 e 2)' = 'Classe A',
+                           'Classe E - denominação Professor Titular [nível único]' = 'Classe E',
+                           'Classe C - Professor Adjunto [níveis 1, 2, 3 e 4]' = 'Classe C',
+                           'Classe B - Professor Assistente [níveis 1 e 2]' = 'Classe B')) %>% 
+  rename(ens_basico_publico = `Você.teve.experiência.docente.antes.do.vínculo.na.universidade.atual.`) %>% 
+  rename(ens_basico_privado = X) %>% 
+  rename(IFs = X.1) %>% 
+  rename(ens_superior_privado = X.2) %>% 
+  rename(universidade_estadual = X.3) %>% 
+  rename(universidade_federal = X.4) %>% 
+  rename(maior_insatisfacao = Em.geral..especifique..MARCAR.PRINCIPAL..a.sua.maior.insatisfação.decorrente.do.trabalho.na.Universidade...INCLUINDO.OS.AS.APOSENTADOS.AS..SUBSTITUTOS.E.VISITANTES.) %>% 
+  mutate(maior_insatisfacao = recode(maior_insatisfacao,
+                                     'Infraestrutura inadequada para desenvolver o trabalho (espaço, instalações, equipamentos, internet, etc.)' = 'Infraestrutura inadequada',
+                                     'Dificuldade nas relações interpessoais.' = 'Relações interpessoais',
+                                     'Plano de carreira e Salário não valem a pena.' = 'Plano de carreira e salário ruins')) %>% 
+  rename(estresse_relacoes_interpessoais = Na.sua.rotina.de.trabalho.na.universidade..você.reconhece.atitudes.de.estresse.nas.relações.interpessoais...NÃO.SE.APLICA.PARA.QUEM.NÃO.ESTÁ.ATUANDO.) %>% 
+  rename(plano_saude = Você.possui.Plano.de.Saúde.) %>% 
+  rename(carga_horaria_excessiva = Você.percebe.que.a.sua.carga.horária.semanal.excede.o.previsto.no.seu.regime.de.trabalho.) 
+
+```
+
+Total de respondentes.
+
+```{r}
+nrow(dados)
+```
+
+## Análise Descritiva de cada uma das variáveis
+
+Encaminhamento:
+
+Vou começar a estudar cada uma das variáveis individualmente.
+
+Análise bidimensional ==> Cultura política e carreira: é aposentado ou ativo. Entre os ativos: DE, turno parcial (20 e 40 horas).
+  * Campos: 15 e 16 (tem que responder);
+
+Campo 11 (formação de graduação): agrupar por áreas (verificar com a empresa junior).
+Bolsa da APUB.
+Comprovante de estudante. Pró-rata da bolsa de IC. (250 reais)
+Bolsista auxiliar.
+
+Prazo: entrega parcial -- 17/11/2020.
+Retorno: entrega completa em fevereiro.
+
+\cleardoublepage
+
+## Idade
+
+Aqui um docente respondeu a idade e foi excluída da análise.
+
+### Tabela de distribuição de frequência
+
+```{r, fig.align='center'}
+
+table_distribution(dados %>% filter(idade != ''), 'idade', 'Idade')
+
+```
+
+### Gráfico de barras para Idade
+
+```{r, fig.align='center'}
+grafico(dados %>% filter(idade != ''), 'idade', 'Idade') +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Gênero
+
+Três docentes não informaram o seu gênero e foram retirados na análise da variável _gênero._
+
+#### Tabela de distribuição de frequência para Gênero
+
+```{r}
+table_distribution(dados %>% filter(genero != ''), 'genero', 'Gênero')
+```
+
+#### Gráfico de barra para Gênero
+
+```{r fig.align='center'}
+grafico(dados %>% filter(genero != ''), 'genero', 'Gênero') +
+  scale_y_continuous(breaks = seq(from = 0, to = 65, by = 5))
+```
+
+\cleardoublepage
+
+## Estado de origem
+
+Vinte e uma pessoas não informaram o _estado de origem_ e foram removidos da análise de _estado de origem_. 
+
+### Tabela de distribuição de frequência para Estado de origem
+
+```{r}
+table_distribution(dados %>% filter(estado != ''), 'estado', 'Estado')
+```
+
+### Gráfico de barras para Estado de origem
+
+```{r}
+grafico(dados %>% filter(estado != ''), 'estado', 'Estado') +
+  scale_y_continuous(breaks = seq(from = 0, to = 70, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Rede de ensino
+
+### Tabela de distribuição de frequência para Rede de ensino
+
+```{r}
+table_distribution(dados, 'rede_ensino', 'Rede de ensino')
+```
+
+### Gráfico de barras para Rede de ensino
+
+```{r}
+grafico(dados, 'rede_ensino', 'Rede de ensino') +
+  scale_y_continuous(breaks = seq(from = 0, to = 50, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Escolaridade do pai
+
+### Tabela de distribuição de frequência para a Escolaridade do pai
+
+```{r}
+table_distribution(dados, 'escolaridade_pai', 'Escolaridade do pai')
+```
+
+### Gráfico de barras para Escolaridade do pai
+
+```{r}
+grafico(dados, 'escolaridade_pai', 'Escolaridade do pai') +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Escolaridade da mãe
+
+
+### Tabela de distribuição de frequência para a Escolaridade da mãe
+
+```{r}
+table_distribution(dados, 'escolaridade_mae', 'Escolaridade da mãe')
+```
+
+### Gráfico de barras para a Escolaridade da mãe
+
+```{r}
+grafico(dados, 'escolaridade_mae', 'Escolaridade da mãe') +
+  scale_y_continuous(breaks = seq(from = 0, to = 30, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Raça
+
+### Tabela de distribuição de frequência para Raça
+
+```{r}
+table_distribution(dados, 'raca', 'Raça')
+```
+
+### Gráfico de barras para Raça
+
+```{r}
+grafico(dados, 'raca', 'Raça') +
+  scale_y_continuous(breaks = seq(from = 0, to = 55, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Domicílio
+
+### Tabela de distribuição de frequência para a Condição do domicílio
+
+```{r}
+table_distribution(dados, 'domicilio', 'Condição do domicílio')
+```
+
+### Gráfico de barras para Condição de domicílio
+
+```{r}
+grafico(dados, 'domicilio', 'Condição do domicílio') +
+  scale_y_continuous(breaks = seq(from = 0, to = 55, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Filhos
+
+### Tabela de distribuição de frequência para o número de filhos
+
+```{r}
+table_distribution(dados, 'filhos', 'Filhos')
+```
+
+### Aproximando o número de filhos
+
+```{r}
+dados %>%
+  mutate(n_filhos = recode(filhos,
+         '0 (tem filhos, mas não mora)' = '0',
+         'Não tenho filho/a.' = '1') %>% as.numeric()) %>%
+  summarize(`Número médio de filhos` = mean(n_filhos),
+            `Número mediano de filhos` = median(n_filhos),
+            `Desvio padrão` = sd(n_filhos)) %>%
+  knitr::kable(digits = 2, format = 'pipe', align = rep('c', 3),
+               format.args = list(decimal.mark = ','))
+```
+
+
+### Gráfico de barras para o número de filhos
+
+```{r}
+grafico(dados, 'filhos', 'Filhos') +
+  scale_y_continuous(breaks = seq(from = 0, to = 40, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Titulação
+
+### Tabela de distribuição de frequência para Titulação
+
+```{r}
+table_distribution(dados, 'titulacao', 'Titulação')
+```
+
+### Gráfico de barras para a Titulação
+
+```{r}
+grafico(dados, 'titulacao', 'Titulação') +
+  scale_y_continuous(breaks = seq(from = 0, to = 50, by = 5)) +
+  coord_flip()
+```
+
+### Número média das titulações
+
+```{r}
+dados %>% select(`Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.obtidos.por.você.`, x, x1, x2, x3) %>%
+  rename(`Graduação` = `Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.obtidos.por.você.`) %>%
+  rename(`Especialização` = x) %>%
+  rename(`Mestrado` = x1) %>%
+  rename(`Doutorado` = x2) %>%
+  rename(`Pós-doutorado` = x3) %>% as_tibble() %>%
+  pivot_longer(everything(), names_to = 'Título', values_to = 'Frequência') %>%
+  filter(`Frequência` != '') %>%
+  mutate(`Frequência` = recode(`Frequência`,
+                               '5.' = '5',
+                               'Nenhum.' = '0',
+                               'Mais de 5.' = '6') %>% as.numeric()) %>%
+  group_by(Título) %>%
+  summarise(`Média` = mean(Frequência), `Mediana` = median(Frequência),
+            `Desvio Padrão` = sd(Frequência),
+            `Coeficiente de variação` = `Média` / `Desvio Padrão`,
+            .groups = 'drop') %>%
+  arrange(Título) %>%
+  knitr::kable(digits = 3,  format = 'pipe', align = 'c',
+               format.args = list(decimal.mark = ','))
+
+
+```
+
+\cleardoublepage
+
+## Campus
+
+### Tabela de distribuição de frequência para Campus
+
+```{r}
+table_distribution(dados, 'campus', 'Campus')
+```
+
+### Gráfico de barras para Campus
+
+```{r}
+grafico(dados, 'campus', 'Campus') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Distância do trabalho
+
+### Tabela de distribuição de frequência para Distância do trabalho
+
+```{r}
+table_distribution(dados, 'Qual.a.estimativa.de.distância.entre.a.sua.moradia.e.o.local.de.trabalho.', 'Distância do trabalho')
+```
+
+### Gráfico de barras para Distância do Trabalho
+
+```{r}
+grafico(dados, 'Qual.a.estimativa.de.distância.entre.a.sua.moradia.e.o.local.de.trabalho.', 'Distância do trabalho') +
+  scale_y_continuous(breaks = seq(from = 0, to = 40, by = 5)) +
+  coord_flip()
+```
+
+## Tipo de vínculo
+
+### Tabela de distribuição de frequência para Vínculo
+
+Só tem professo efetivo na amostra.
+
+```{r}
+table_distribution(dados, 'Qual.o.seu.vínculo.com.a.Universidade.', 'Vínculo')
+```
+
+
+\cleardoublepage
+
+## Regime de trabalho
+
+### Tabela de distribuição de frequência para Regime de trabalho
+
+```{r}
+table_distribution(dados, 'Você.recebe.remuneração.de.qual.regime.de.trabalho..', 'Regime de trabalho')
+```
+
+### Gráfico de barras para Regime de trabalho
+
+```{r}
+grafico(dados, 'Você.recebe.remuneração.de.qual.regime.de.trabalho..', 'Regime de trabalho')
+```
+
+
+\cleardoublepage
+
+## Estágio na carreira
+
+### Tabela de distribuição de frequência para Estágio na Carreira
+
+```{r}
+table_distribution(dados, 'carreira', 'Estágio na carreira')
+```
+
+### Gráfico de barras para Estágio na Carreira
+
+```{r}
+grafico(dados, 'carreira', 'Estágio na carreira') +
+  scale_y_continuous(breaks = seq(from = 0, to = 40, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Experiência no ensino básico público
+
+### Tabela de distribuição de frequência para Experiência no ensino básico público
+
+```{r}
+table_distribution(dados, 'ens_basico_publico', 'Experiência no ensino básico público')
+```
+
+### Gráfico de barras para Experiência no ensino básico público
+
+```{r}
+grafico(dados, 'ens_basico_publico', 'Experiência no ensino básico\n público') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Experiência no ensino básico privado
+
+### Tabela de distribuição de frequência para Experiência no ensino básico privado
+
+```{r}
+table_distribution(dados, 'ens_basico_privado', 'Experiência no ensino básico privado')
+```
+
+### Gráfico de barras para Experiência no ensino básico privado
+
+```{r}
+grafico(dados, 'ens_basico_privado', 'Experiência no ensino básico\n privado') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Experiência nos Institutos Federais
+
+### Tabela de distribuição de frequência para Experiência nos IFs
+
+```{r}
+table_distribution(dados, 'IFs', 'Experiência nos Institutos Federais')
+```
+
+### Gráfico de barras para Experiência nos IFs
+
+```{r}
+grafico(dados, 'IFs', 'Experiência nos Institutos\n Federais') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Experiência no Ensino Superior Privado
+
+### Tabela de distribuição de frequência para Ensino Superior Privado
+
+```{r}
+table_distribution(dados, 'ens_superior_privado', 'Experiência no ensino superior privado')
+```
+
+### Gráfico de barras para Ensino superior privado
+
+```{r}
+grafico(dados, 'ens_superior_privado', 'Experiência no ensino\n superior privado') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+## Experiência nas Universidades Estaduais
+
+### Tabela de distribuição de frequência para Experiência nas Universidades Estaduais
+
+```{r}
+table_distribution(dados, 'universidade_estadual', 'Experiência nas universidades estaduais')
+```
+
+### Gráfico de barras para Experiência nas Universidades Estaduais
+
+```{r}
+grafico(dados, 'universidade_estadual', 'Experiência nas universidades\n estaduais') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+## Experiência nas Universidades Federais
+
+### Tabela de distribuição de frequência para Experiência nas Universidades Federais
+
+```{r}
+table_distribution(dados, 'universidade_federal', 'Experiência nas universidades federais')
+```
+
+### Gráfico de barras para Experiência nas Universidades Federais
+
+```{r}
+grafico(dados, 'universidade_federal', 'Experiência nas universidades\n federais') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Atividades como aposentado
+
+### Tabela de disribuição de frequência para Atividade como aposentado
+
+```{r}
+atividades <- tribble(~`Atividade como aposentado`, ~frequência,
+                 'Não se aplica', sum(dados$Sendo.aposentado.a..quais.as.atividades.você.desenvolve.na.Universidade.no.momento...MARQUE.VÁRIAS.OPÇÕES...EFETIVOS...MARCAR.NSA. == 'Não Se Aplica (NSA).'),
+                 'Pesquisa na Pós-graduação', sum(dados$a1 == 'Atuação em Pesquisa ligada à Programa de Pós-Graduação.'),
+                 'Docência na Graduação', sum(dados$a2 == 'Docência na Graduação.'),
+                 'Docência: Lato Sensu', sum(dados$a3 == 'Docência na Pós-Graduação Lato Sensu.'),
+                 'Docência: Stricto Sensu', sum(dados$a4 == 'Docência na Pós-Graduação Stricto Sensu.'),
+                 'Editoria de Revistas científicas.',sum(dados$a5 == 'Editoria de Revistas científicas.'),
+                 'Conselhos, Cargos de gestão, Assessoramento', sum(dados$a6 == 'Ocupação de Conselhos, Cargos de Gestão e Assessoramento.'),
+                 'Atuação na APUB', sum(dados$a7 == 'Atuação em Sindicato (Direção, Grupos de Trabalho, Comissões, Conselhos, etc.)'),
+                 'Comissões institucionais', sum(dados$a8 == 'Participação em comissões institucionais da Universidade (eventos científicos, planejamento, reuniões, etc.).'),
+                 'Nenhuma das alternativas anteriores.', sum(dados$a9 == 'Nenhuma das alternativas anteriores.'))
+
+atividades %>% knitr::kable(digits = 0, format.args = list(decimal.mark = ','),
+                            format = 'pipe', align = rep('c', 2))
+```
+
+### Gráfico de barras de frequêencia para Atividade para aposentado
+
+```{r}
+ggplot(atividades) +
+  geom_bar(aes(x = `Atividade como aposentado`, y = `frequência`), stat = 'identity',
+           fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 500, by = 150)) +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 15)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Tempo na UFBA
+
+### Medidas de resumo para o Tempo de vínculo
+
+```{r}
+df_tempo <- dados %>%
+  select(Sendo.efetivo.ou.aposentado..em.que.ano.você.tomou.posse.na.Universidade.a.qual.está.vinculado.atualmente...MARQUE.NÃO.SE.APLICA...SUBSTITUTOS.E.VISITANTES.) %>%
+  rename(tempo = Sendo.efetivo.ou.aposentado..em.que.ano.você.tomou.posse.na.Universidade.a.qual.está.vinculado.atualmente...MARQUE.NÃO.SE.APLICA...SUBSTITUTOS.E.VISITANTES.) %>%
+  mutate(tempo = recode(tempo, 'Não Se Aplica.' = '')) %>%
+  mutate(tempo = as.numeric(tempo)) %>%
+  mutate(tempo_vinculo = 2020 - tempo) %>%
+  filter(!is.na(tempo_vinculo))
+
+df_tempo %>%
+  summarise(`Média` = mean(tempo_vinculo), `Desvio padrão` = sd(tempo_vinculo), Mediana = median(tempo_vinculo),
+            `Primeiro Quartil` = quantile(tempo_vinculo, probs = 0.25), `Terceiro Quartil` = quantile(tempo_vinculo, probs = 0.75)) %>%
+  knitr::kable(digits = 2, format = 'pipe', align = 'c', format.args = list(decimal.mark = ','))
+
+```
+
+### Gráfico de barras para Tempo de vínculo
+
+```{r}
+ggplot(df_tempo) +
+  geom_bar(aes(tempo_vinculo), fill = 'blue') +
+  labs(x = 'Tempo de vínculo com a UFBA', y = 'Frequência') +
+  scale_y_continuous(breaks = seq(from = 0, to = 50, by = 3)) +
+  scale_x_continuous(breaks = seq(from = 0, to = 50, by = 3)) +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 15))
+```
+
+\cleardoublepage
+
+## Atividades antes da pandemia
+
+### Tabela de distribuição de frequência para Atividades antes da pandemia
+
+Podia marcar várias opções para esta pergunta. Fiquei confuso para responder e para analisar essa pergunta.
+
+Minha interpretação: se a pessoa respondeu, ela realiza a tarefa. Essa questão é do tipo _caixa de seleção_, e não temos muito o que fazer.
+
+```{r}
+dados1 <- dados %>%
+  rename(atividades_antes_pandemia = Destas.atividades..marque.TODAS.as.que.são.recorrentes.na.sua.rotina.de.trabalho.ANTES.da.pandemia..MARQUE.VÁRIAS.OPÇÕES.)
+
+df_antes_pandemia <- tribble(~Atividade, ~`Frequência`,
+                             'Aula: graduação', sum(dados1$atividades_antes_pandemia != '' & dados1$atividades_antes_pandemia != 'Não se Aplica.'),
+                             'Aula: Lato Sensu', sum(dados1$b1 != '' & dados1$b1 != 'Não se Aplica.'),
+                             'Aula: EAD', sum(dados1$b2 != '' & dados1$b2 != 'Não se Aplica.'),
+                             'Gestão da Universidade', sum(dados1$b3 != '' & dados1$b3 != 'Não se Aplica.'),
+                             'Emails + WhatApp', sum(dados1$b4 != '' & dados1$b4 != 'Não se Aplica.'),
+                             'Leitura de jornal', sum(dados1$b5 != '' & dados1$b5 != 'Não se Aplica.'),
+                             'Reuniões: colegiados e comissões', sum(dados1$b6 != '' & dados1$b6 != 'Não se Aplica.'),
+                             'Pareceres + Bancas examinadoras', sum(dados1$b7 != '' & dados1$b7 != 'Não se Aplica.'),
+                             'Revista Acadêmica', sum(dados1$b8 != '' & dados1$b8 != 'Não se Aplica.'),
+                             'Escrita de artigo', sum(dados1$b9 != '' & dados1$b9 != 'Não se Aplica.'),
+                             'Comitê editorial/Comitê de Ética', sum(dados1$b10 != '' & dados1$b10 != 'Não se Aplica.'),
+                             'Organização de eventos', sum(dados1$b11 != '' & dados1$b11 != 'Não se Aplica.'),
+                             'Publicação de evento', sum(dados1$b12 != '' & dados1$b12 != 'Não se Aplica.'),
+                             'Preparação de aula', sum(dados1$b13 != '' & dados1$b13 != 'Não se Aplica.'),
+                             'Atividades de pesquisa', sum(dados1$b14 != '' & dados1$b14 != 'Não se Aplica.'),
+                             'Atividades de extensão', sum(dados1$b15 != '' & dados1$b15 != 'Não se Aplica.'))
+
+df_antes_pandemia %>%
+  knitr::kable(digits = 2, format = 'pipe', format.args = list(decimal.mark = ','), align = 'c')
+
+```
+
+### Gráfico de barras para Tempo de vínculo
+
+```{r}
+ggplot(df_antes_pandemia) +
+  geom_bar(aes(x = `Atividade`, y = `Frequência`), stat = 'identity',
+           fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 500, by = 150)) +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 15)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Satisfação com UFBA
+
+### Tabela de distribuição de frequência para Satistação com UFBA
+
+```{r}
+tab <- dados %>%
+  select(Avalie.sua.satisfação.insatisfação.no.que.tange.as.suas.condições.de.trabalho.docente.neste.momento.de.pandemia...Marque.Não.Se.Aplica..NSA...caso.seja.aposentado.a.) %>%
+  rename(satisfacao_ufba = Avalie.sua.satisfação.insatisfação.no.que.tange.as.suas.condições.de.trabalho.docente.neste.momento.de.pandemia...Marque.Não.Se.Aplica..NSA...caso.seja.aposentado.a.) %>%
+  filter(satisfacao_ufba != '' & satisfacao_ufba != 'Não Se Aplica (NSA).')
+
+table_distribution(tab, 'satisfacao_ufba', 'Satisfação com UFBA')
+```
+
+### Gráfico de barras para Satisfação com UFBA
+
+```{r}
+grafico(tab, 'satisfacao_ufba', 'Satisfação com UFBA') +
+  scale_y_continuous(breaks = seq(from = 0, to = 50, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Maior insatisfação
+
+### Tabela de distribuição de frequência para Maior insatisfação
+
+```{r}
+table_distribution(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA')
+```
+
+### Gráfico de barras para Maior insatisfação
+
+```{r}
+grafico(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA') +
+  scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Estresse nas relações interpessoais
+
+### Tabela de distribuição de frequência para Estresse nas relações interpessoais
+
+```{r}
+tab <- dados %>%
+  filter(estresse_relacoes_interpessoais != '' & estresse_relacoes_interpessoais != 'Não Se Aplica (NSA).')
+
+table_distribution(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações interpessoais')
+```
+
+### Gráfico de barras para Estresse nas relações interpessoais
+
+```{r}
+grafico(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações interpessoais') +
+  scale_y_continuous(breaks = seq(from = 0, to = 80, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Acompanhamento psicológico ou psiquiátrico
+
+### Tabela de distribuição de frequência para Acompanhamento psicológico ou psiquiátrico
+
+```{r}
+table_distribution(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológico.ou.psiquiátrico.', 'Acompanhamento psicológico ou psiquiátrico')
+```
+
+### Gráfico de barras para Acompanhamento psicológico ou psiquiátrico
+
+```{r}
+grafico(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológico.ou.psiquiátrico.', 'Acompanhamento psicológico ou psiquiátrico') +
+  scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5))
+
+```
+
+\cleardoublepage
+
+## Plano de saúde
+
+### Tabela de distribuição de frequência para Plano de saúde
+
+```{r}
+table_distribution(dados, 'plano_saude', 'Plano de saúde')
+```
+
+### Gráfico de barras de frequência para Plano de Saúde
+
+```{r}
+grafico(dados, 'plano_saude', 'Plano de saúde') +
+  scale_y_continuous(breaks = seq(from = 0, to = 80, by = 10))
+```
+
+\cleardoublepage
+
+## Carga horária excessiva
+
+### Tabela de distribuição de frequência para Carga horária excessiva
+
+```{r}
+table_distribution(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
+```
+
+### Gráfico de barras para Carga horária excessiva
+
+```{r}
+grafico(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
+
+```
+
+\cleardoublepage
+
+## Renda mensal familiar
+
+### Tabela de distribuição para Renda mensal familiar
+
+```{r}
+table_distribution(dados, 'Qual.a.sua.renda.familiar.', 'Renda mensal familiar')
+```
+
+### Gráfico de barras para Renda mensal familiar
+
+```{r}
+grafico(dados, 'Qual.a.sua.renda.familiar.', 'Renda mensal familiar') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Ensino
+
+### Tabela de distribuição de frequência para Ensino
+
+```{r}
+tab <- dados %>%
+  rename(ensino = Sobre.a.atividade.de.ensino..você.ministra.aula..Marque.várias.opções.)
+
+tabe <- tribble(~`Atividade de ensino`, ~`Frequência`,
+                'Graduação à Distância', sum(tab$ensino != ''),
+                'Graduação presencial.', sum(tab$c1 != ''),
+                'Pós-graduação à distância.', sum(tab$c2 != ''),
+                'Pós-graduação presencial.', sum(tab$c3 != ''),
+                'Todas as alternativas anteriores.', sum(tab$c4 != ''))
+
+tabe %>%
+  knitr::kable(format = 'pipe', align = 'c', format.args = list(decimal.mark = ','))
+```
+
+### Gráfico de barras para Ensino
+
+```{r}
+ggplot(tabe) +
+  geom_bar(aes(`Atividade de ensino`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 500, by = 150)) +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 15)) +
+  coord_flip()
+```
+
+
+\cleardoublepage
