@@ -10,7 +10,9 @@ editor_options:
 
 ## Pacotes usados
 
-```{r,  message=FALSE}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 library(readxl)
 library(readr)
 library(openxlsx)
@@ -914,5 +916,955 @@ ggplot(tabe) +
   coord_flip()
 ```
 
+## Orientações
+
+Variável complicada ==> Muitos não responderam.
+
+```{r}
+tribble(~`Tipo de orientação`, ~`Não respondentes`,
+               'TCC', sum(dados$Qual.a.média.anual.de.orientações.que.você.realizou.nos.últimos.três.anos. != ''),
+               'PET, PIBID, PIBIC, PIBIT', sum(dados$d1 != ''),
+               'Mestrado', sum(dados$d2 != ''),
+               'Doutorado', sum(dados$d3 != ''),
+               'Outros', sum(dados$d4 != '')) %>% 
+  knitr::kable(format = 'pipe', digits = 2, align = 'c')
+
+
+```
+
+
+### Medidas resumo para cada tipo de orientação
+
+Eu estou usando uma abordagem conservadora: estou pegando limite inferior do intervalo com sendo o valor de todo mundo da classe.
+
+Aqui retirei todas as respostas vazias (conforme tabela) e calculei a média, a mediana, o desvio padrão e coeficiente de variância.
+
+\small
+
+```{r}
+df <- dados %>% 
+  select(Qual.a.média.anual.de.orientações.que.você.realizou.nos.últimos.três.anos.,
+         d1, d2, d3, d4) %>%
+  pivot_longer(everything(), names_to = 'Tipo de orientação', values_to = 'Frequência') 
+df <- df %>% 
+  mutate(`Tipo de orientação` = recode(`Tipo de orientação`,
+                                       'Qual.a.média.anual.de.orientações.que.você.realizou.nos.últimos.três.anos.' = 'TCC',
+                                       'd1' = 'PET, PIBI(D, C , T)',
+                                       'd2' = 'Mestrado',
+                                       'd3' = 'Doutorado',
+                                       'd4' = 'Outros')) %>% 
+  mutate(Frequência = recode(Frequência,
+                             'Nenhum.' = '0',
+                             '1-3' = '1',
+                             '3-5' = '3',
+                             '6-8' = '6',
+                             '8-10' = '8',
+                             '10-12' = '10',
+                             'Acima de 12.' = '12')) %>% 
+  mutate(Frequência = as.numeric(Frequência))
+
+df %>%
+  filter(!is.na(Frequência)) %>% 
+  group_by(`Tipo de orientação`) %>% 
+  summarise(`Média de orientações` = mean(Frequência),
+            `Mediana de orientações` = median(Frequência),
+            `Desvio Padrão` = sd(Frequência),
+            `Coeficiente de variação` = `Desvio Padrão` / `Média de orientações`, .groups = 'drop') %>% 
+  knitr::kable(format = 'simple', digits = 3, align = 'c', format.args = list(decimal.mark = ','))
+
+```
+
+\normalsize
+
+### Diagrama de caixa
+
+Vamos fazer o diagrama de caixa para este caso.
+
+Todas as variáveis tem média em torno de 1 e tem assimetria à direita.
+
+```{r}
+df %>%
+  filter(!is.na(Frequência)) %>%
+  ggplot() +
+  geom_boxplot(aes(x = `Tipo de orientação`, y = Frequência)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 15, by = 2)) +
+  theme(axis.title = element_text(size = 20),
+        axis.text = element_text(size = 15)) +
+  coord_flip()
+```
+
+### Gráfico de barras
+
+```{r, out.width='115%'}
+grafico(df %>% filter(!is.na(Frequência)), 'Frequência', 'Frequência') +
+  scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5)) +
+  facet_grid(cols = vars(`Tipo de orientação`)) +
+  theme_bw()
+```
+
 
 \cleardoublepage
+
+## Atividades na Universidade
+
+Variável de tipo _caixa de seleção_: vou fa fazer a tabela de distribuição de frequência.
+
+
+### Tabela de distribuição de frequência para Atividades na Universidade
+
+```{r}
+tab <- tribble(~`Atividades na Universidade`, ~`Frequência`,
+               'Não exerci atividades', sum(dados$Nos.últimos.três.anos.quais.destas.atividades.você.desempenhou.na.Universidade..NSA...PARA.QUEM.NÃO.EXERCEU.NENHUMA.ATIVIDADE..INCLUSIVE.APOSENTADO.A. != ''),
+               'Coordenação: graduação.', sum(dados$e1 != ''),
+               'Coordenação: área do conhecimento', sum(dados$e2 != ''),
+               'Representante: colegiado', sum(dados$e3 != ''),
+               'Coordenação: lato-sensu', sum(dados$e4 != ''),
+               'Coordenação: strictu sensu', sum(dados$e5 != ''),
+               'Chefe de departamento', sum(dados$e6 != ''),
+               'Direção de unidade', sum(dados$e7 != ''),
+               'Editor de revista', sum(dados$e8 != ''),
+               '(Vice) líde de grupo de pesquisa', sum(dados$e9 != ''),
+               'Função na Administração Central', sum(dados$e10  != ''),
+               'Consultoria', sum(dados$e11 != ''),
+               'Outros', sum(dados$e12 != ''))
+
+tab %>% 
+  knitr::kable(format = 'simple', align = 'c')
+```
+
+### Gráfico de barras para Atividades na Universidade
+
+```{r}
+tab %>% 
+  ggplot() +
+  geom_bar(aes(`Atividades na Universidade`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 600, by = 50)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Vínculo com a APUB
+
+Retirei 19 pessoas que não informaram o vínculo com a APUB.
+
+### Tabela de distribuição de frequência para Atividades na Universidade
+
+```{r}
+dados <- dados %>% 
+  rename('vinculo_sindicato' = 'Qual.seu.vínculo.atual.com.a.APUB.') %>% 
+  mutate(vinculo_sindicato = recode(vinculo_sindicato,
+                                    'Filiado à APUB.' = 'APUB',
+                                    'Não sou filiado a nenhum sindicato.' = 'Sem filiação',
+                                    'Filiado a outro sindicato.' = 'Outro sindicato'))
+
+table_distribution(dados, 'vinculo_sindicato', 'Vínculo com o sindicato')
+
+```
+
+### Gráfico de barras para o vínculo com a APUB
+
+```{r}
+grafico(dados, 'vinculo_sindicato', 'Vínculo com a APUB') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Motivos para filiar à APUB
+
+Campo do tipo _caixa de seleção_, não tem muito o que fazer: vou fazer uma tabela de distribuição e gráfico de barras.
+
+### Tabela de distribuição de frequência para Motivos de filiar à APUB
+
+```{r}
+df <- tribble(~`Motivos de Filiação`, ~`Frequência`,
+              'Assistência jurídica', sum(dados$Sendo.filiado.à.APUB..por.quais.motivos.você.decidiu.se.filiar.ao.sindicato...MARQUE.VÁRIAS.OPÇÕES. != ''),
+              'Acordo coletivo', sum(dados$f1 != ''),
+              'Convênios', sum(dados$f2 != ''),
+              'Eventos culturais', sum(dados$f3 != ''),
+              'Formação política', sum(dados$f4 != ''),
+              'Importância da mobilização', sum(dados$f5 != ''),
+              'Indicação de colega', sum(dados$f6 != ''),
+              'Valorização da APUB', sum(dados$f7 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+df %>% 
+  knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de baras para Motivos de filiar à APUB
+
+```{r}
+df %>% 
+  ggplot() +
+  geom_bar(aes(`Motivos de Filiação`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 600, by = 50)) +
+  theme(axis.title = element_text(size  = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Tempo de sindicalização
+
+Retirei 10 pessoas que selecionaram _Não sabe_, e retire 292 pessoas que não responderam esta questão.
+
+Adotei uma abordagem conservadora, todos que estão em faixa de valor é igual ao seu limite inferior.
+
+### Tabela de distribuição de frequência para Tempo de sindicalização
+
+```{r}
+table_distribution(
+  dados %>% filter(Qual.o.seu.tempo.de.sindicalização. != '' & Qual.o.seu.tempo.de.sindicalização. != 'Não sabe.'),
+  'Qual.o.seu.tempo.de.sindicalização.',
+  'Tempo de sindicalização'
+)
+```
+
+### Medidas de resumo
+
+```{r}
+dados <- dados %>% 
+  mutate(tempo_apub = recode(Qual.o.seu.tempo.de.sindicalização.,
+                             '5 a 10 anos.' = '5',
+                             '20 a 30 anos.' = '20',
+                             'Mais de 30 anos.' = '30',
+                             '1 a 5 anos.' = '1',
+                             '15 a 20 anos.' = '15',
+                             '10 a 15 anos.' = '10',
+                             'Não sabe.' = '')) %>% 
+  mutate(tempo_apub = as.numeric(tempo_apub))
+
+dados %>% 
+  filter(!is.na(tempo_apub)) %>% 
+  summarise(`Tempo médio de sindicalização` = mean(tempo_apub),
+            `Tempo mediano de sindicalização` = median(tempo_apub),
+            `Desvio padrão do tempo de sindicalização` = sd(tempo_apub),
+             `Coeficiente de variação do tempo de sindicalização` = `Desvio padrão do tempo de sindicalização` / `Tempo médio de sindicalização`) %>% 
+  knitr::kable(format = 'pipe', digits = 2, align = 'c', format.args = list(decimal.mark = ','))
+```
+
+
+### Gráfico de barras para Tempo de sindicalização
+
+```{r}
+grafico(
+  dados %>% filter(Qual.o.seu.tempo.de.sindicalização. != '' & Qual.o.seu.tempo.de.sindicalização. != 'Não sabe.'),
+  'Qual.o.seu.tempo.de.sindicalização.',
+  'Tempo de sindicalização'
+) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Motivos de não filiação
+
+Campo do tipo _caixa de seleção_. Não tem muito o que fazer nesse caso: Vou fazer a tabela de distribuição de frequência e o gráfico de barras. 
+
+### Tabela de distribuição de frequência para Tempo de sindicalização
+
+```{r}
+tab <- tribble(~`Motivos para NÃO filiação`, ~`Frequência`,
+               'Não se sente representado.', sum(dados$Por.quais.motivos.você.decidiu.NÃO.se.filiar.a.um.sindicato..MARQUE.VÁRIAS.OPÇÕES.. != ''),
+               'É contrário á atuação de sindicato.', sum(dados$g1 != ''),
+               'Não vê benefícios.', sum(dados$g2 != ''),
+               'Não conhece o sindicato.', sum(dados$g3 != ''),
+               'Não possui tempo.', sum(dados$g4 != ''),
+               'Processo de filiação é difícil.', sum(dados$g5 != ''),
+               'O desconto é muito alto.', sum(dados$g6 != ''),
+               'Não conhece ninguém que participa.', sum(dados$g7 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+tab %>% 
+  knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de barras para Tempo de sindicalização
+
+```{r}
+tab %>% 
+  ggplot() +
+  geom_bar(aes(`Motivos para NÃO filiação`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Filiação em 18 meses
+
+613 pessoas não responderam essa questão e foram removidas na análise deste campo.
+
+### Tabela de distribuição de frequência para Filiação em 18 meses
+
+```{r}
+table_distribution(
+  dados %>% filter(Você.que.NÃO.é.filiado.a.a.um.sindicato..diria.que.é.provável.se.filiar.nos.próximos.18.meses. != ''),
+  'Você.que.NÃO.é.filiado.a.a.um.sindicato..diria.que.é.provável.se.filiar.nos.próximos.18.meses.',
+  'Filiação nos próximos 18 meses'
+)
+```
+
+### Gráfico de barras para Filiação em 18 meses
+
+```{r}
+grafico(
+  dados %>% filter(Você.que.NÃO.é.filiado.a.a.um.sindicato..diria.que.é.provável.se.filiar.nos.próximos.18.meses. != ''),
+  'Você.que.NÃO.é.filiado.a.a.um.sindicato..diria.que.é.provável.se.filiar.nos.próximos.18.meses.',
+  'Filiação nos próximos 18 meses'
+) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Fonte de informação
+
+Campo do tipo _caixa de seleção_. Só é possívelfazer uma tabela de distribuição de frequência e um gráfico de barras.
+
+### Tabela de distribuição de frequência para Fonte de informação
+
+```{r}
+df <- tribble(~`Fonte de informação`, ~`Frequência`,
+              'Facebook', sum(dados$h1 != ''),
+              'Instagram', sum(dados$h2 != ''),
+              'Jornal', sum(dados$h3 != ''),
+              'Sites e blogs', sum(dados$h4 != ''),
+              'WhatsApp', sum(dados$h5 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+df %>% 
+  knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de barras para Fonte de informação
+
+```{r}
+df %>% 
+  ggplot() +
+  geom_bar(aes(`Fonte de informação`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 700, by = 50)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Meio de comunicação da APUB
+
+
+Campo do tipo _caixa de seleção_.
+
+### Tabela de distribuição de frequência para Meio de comunicação da APUB
+
+```{r}
+df <- tribble(~`Meio de comunicação`, ~`Frequência`,
+              'Comunicação visual', sum(dados$Independente.da.filiação.à.APUB..marque.os.meios.de.comunicação.do.sindicato.acessados.por.você...MARQUE.VÁRIAS.OPÇÕES. != ''),
+              'E-mail', sum(dados$i1 != ''),
+              'Facebook', sum(dados$i2 != ''),
+              'Instagram', sum(dados$i3 != ''),
+              'Jornal do sindicato', sum(dados$i4 != ''),
+              'Site do sindicato', sum(dados$i5 != ''),
+              'Contato com dirigente APUB', sum(dados$i6 != ''),
+              'WhatsApp', sum(dados$i7 != ''),
+              'Não acompanho as comunicações da APUB', sum(dados$i8 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+df %>% 
+  knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de barras para meio de comunicação da APUB
+
+```{r}
+df %>% 
+  ggplot() +
+  geom_bar(aes(`Meio de comunicação`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 600, by = 100)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da assinatura de manifesto on-line
+
+82 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distruição de frequência para Importância de manifesto on-line
+
+```{r}
+table_distribution(dados, 'Em.geral..qual.o.grau.de.importância.você.confere.a.estas.ações.políticas.cotidianas.', 'Importância de manifesto on-line')
+```
+
+### Gráfico de barras para Importância de manifesto on-line
+
+```{r}
+grafico(dados, 'Em.geral..qual.o.grau.de.importância.você.confere.a.estas.ações.políticas.cotidianas.', 'Importância de manifesto\n on-line') +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+
+## Importância de debate em redes sociais
+
+81 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição para importância do debate em redes sociais
+
+```{r}
+table_distribution(dados, 'k1', 'Importância de debate em redes sociais')
+```
+
+### Gráfico de barras para importância do debate em redes sociais
+
+```{r}
+grafico(dados, 'k1', 'Importância de debate em\n redes sociais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da participação das assembleias da APUB
+
+75 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição para importância das assembleias da apub
+
+```{r}
+table_distribution(dados, 'k2', 'Importância das assembleias da APUB')
+```
+
+### Gráfico de barras para importância das assembleias da apub
+
+```{r}
+grafico(dados, 'k2', 'Importância das assembleias\n da APUB') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância dos movimentos sociais
+
+80 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição para importância dos movimentos sociais
+
+```{r}
+table_distribution(dados, 'k3', 'Importância dos movimentos sociais')
+```
+
+### Gráfico de barras para importância dos movimentos sociais
+
+```{r}
+grafico(dados, 'k3', 'Importância dos movimento\n sociais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância das audiências públicas
+
+86 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para a importância das audiências públicas
+
+```{r}
+table_distribution(dados, 'k4', 'Importância das audiências públicas')
+```
+
+### gráfico de barras para a importância das audiências públicas
+
+```{r}
+grafico(dados, 'k4', 'Importância das audiências\n públicas') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância dos partidos políticos
+
+88 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância dos partidos políticos
+
+```{r}
+table_distribution(dados, 'k5', 'Importância dos partidos políticos')
+```
+
+### Gráficos de barras para importância dos partidos políticos
+
+```{r}
+grafico(dados, 'k5', 'Importância dos partidos políticos') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de manifestação de rua
+
+78 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para manifestação de rua
+
+```{r}
+table_distribution(dados, 'k6', 'Importância de manifestação de rua')
+```
+
+### Gráfico de barras para manifestação de rua
+
+```{r}
+grafico(dados, 'k6', 'Importância de manifestação\n de rua') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de campanhas eleitorais
+
+92 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de campanhas eleitorais
+
+```{r}
+table_distribution(dados, 'k7', 'Importância de campanhas eleitorais')
+```
+
+### Gráfico de barras para importância de campanhas eleitorais
+
+```{r}
+grafico(dados, 'k7', 'Importância de campanhas\n eleitorais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da APUB
+
+87 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância da APUB
+
+```{r}
+table_distribution(dados, 'k8', 'Importância da APUB')
+```
+
+### Gráfico de barras para importância da APUB
+
+```{r}
+grafico(dados, 'k8', 'Importância da APUB') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de eleições em conselhos de controle social
+
+88 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância de eleições em conselhos de controle social
+
+```{r}
+table_distribution(dados, 'k9', 'Importância de eleições em conselhos de controle social ')
+```
+
+### Gráficos de barra para importância de eleições em conselhos de controle social
+
+```{r}
+grafico(dados, 'k9', 'Importância de eleições em\n conselhos de controle social') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância dos conselhos profissionais
+
+86 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância dos conselhos profissionais
+
+```{r}
+table_distribution(dados, 'k10', 'Importância dos conselhos profissionais')
+```
+
+### Gráficos de barra para importância dos conselhos profissionais
+
+```{r}
+grafico(dados, 'k10', 'Importância dos conselhos\n profissionais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de conselhos gestores de caráter público
+
+94 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância de conselhos gestores de caráter público
+
+```{r}
+table_distribution(dados, 'k11', 'Importância de conselhos gestores de caráter público')
+```
+
+### Gráfico de barras para importância de conselhos gestores de caráter público
+
+```{r}
+grafico(dados, 'k11', 'Importância de conselhos\n gestores de caráter público') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de contato com autoridades
+
+93 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para Importância de contato com autoridades
+
+```{r}
+table_distribution(dados, 'k12', 'Importância de contato com autoridades')
+```
+
+### Gráfico de barras para Importância de contato com autoridades
+
+```{r}
+grafico(dados, 'k12', 'Importância de contato com\n autoridades') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da participação em eventos de Organizações da Sociedade Civil
+
+88 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para Importância da participação em eventos de Organizações da Sociedade Civil
+
+```{r}
+table_distribution(dados, 'k13', 'Importância da participação em eventos de Organizações da Sociedade Civil')
+```
+
+### Gráfico de barras para Importância da participação em eventos de Organizações da Sociedade Civil
+
+```{r}
+grafico(dados, 'k13', 'Importância da participação em\n eventos de Organizações da\n Sociedade Civil') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+## Importância da Composição de Associações sem fins lucrativos
+
+92 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para Importância da Composição de Associações sem fins lucrativos
+
+```{r}
+table_distribution(dados, 'k14', 'Importância da Composição de Associações sem fins lucrativos')
+```
+
+### Gráficos de barras para Importância da Composição de Associações sem fins lucrativos
+
+```{r}
+grafico(dados, 'k14', 'Importância da Composição de\n Associações sem fins\n lucrativos') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Atividades políticas na Universidade
+
+Campo do tipo _caixa de seleção_.
+
+### Tabela de distribuição de frequência para Atividades políticas na Universidade
+
+```{r}
+df <- tribble(~`Atividades políticas na Universidade`, ~`Frequência`,
+              'Participo das eleições para Reitoria', sum(dados$Quais.as.atividades.você.tem.participado.politicamente.da.vida.universitária...MARQUE.VÁRIAS.OPÇÕES. != ''),
+              'Voto nas eleições para Reitoria', sum(dados$l1 != ''),
+              'Participo das eleição para Diretoria de Unidade', sum(dados$l2 != ''),
+              'Voto das eleição para Diretoria de Unidade', sum(dados$l3 != ''),
+              'Faço parte de um coletivo', sum(dados$l4 != ''),
+              'Participo de eleições para Conselhos Superiores', sum(dados$l5 != ''),
+              'Assino manifestos dentro da Universidade', sum(dados$l6 != ''),
+              'Participo das atividades da APUB', sum(dados$l7 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+df %>% 
+  knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de barras para Atividaes políticas na Universidade
+
+```{r}
+ggplot(df) +
+  geom_bar(aes(`Atividades políticas na Universidade`, `Frequência`),
+           stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 1000, by = 100)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de reuniões públicas
+
+103 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para Importância de reuniões públicas
+
+```{r}
+table_distribution(dados, 'Qual.a.importância.você.atribui.às.ações.organizadas.pela.APUB..RESPONDER.FILIADOS.AS.E.NÃO.FILIADOS.AS.', 'Importância de reuniões públicas')
+```
+
+### Gráfico de barras para Importância de reuniões públicas
+
+```{r}
+grafico(dados, 'Qual.a.importância.você.atribui.às.ações.organizadas.pela.APUB..RESPONDER.FILIADOS.AS.E.NÃO.FILIADOS.AS.', 'Importância de reuniões\n públicas') +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Importância de debate sobre conjuntura
+
+92 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância de debate sobrea a conjuntura
+
+```{r}
+table_distribution(dados, 'm1', 'Importância de Debate sobre conjuntura')
+```
+
+### Gráfico de barras para importância de debate sobrea a conjuntura
+
+```{r}
+grafico(dados, 'm1', 'Importância de Debate sobre\n conjuntura') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância das assembleias docentes
+
+84 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância das assembleias docentes
+
+```{r}
+table_distribution(dados, 'm2', 'Importância das assembleias docentes')
+```
+
+### Gráfico de barras para importância das assembleias docentes
+
+```{r}
+grafico(dados, 'm2', 'Importância das assembleias\n docentes') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de mobilizações
+
+86 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de mobilizações
+
+```{r}
+table_distribution(dados, 'm3', 'Importância de mobilizações')
+```
+
+### Gráfico de barras para importância das mobilizações
+
+```{r}
+grafico(dados, 'm3', 'Importância de mobilizações') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de greve
+
+91 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância de greve
+
+```{r}
+table_distribution(dados, 'm4', 'Importância de greve')
+```
+
+### Gráfico de barras para importância de greve
+
+```{r}
+grafico(dados, 'm4', 'Importância de greve') +
+  coord_flip()
+```
+
+## Importância de debates sobre carreira
+
+84 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequência para importância de debates sobre carreira
+
+```{r}
+table_distribution(dados, 'm5', 'Importância de debates sobre carreira')
+```
+
+### Gráfico de barras para importância de debates sobre carreira
+
+```{r}
+grafico(dados, 'm5', 'Importância de debates sobre\n carreira') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Eventos culturais
+
+89 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências sobre a importância de eventos culturais
+
+```{r}
+table_distribution(dados, 'm6', 'Importância de eventos culturais')
+```
+
+### Gráfico de barras sobre a importância de eventos culturais
+
+```{r}
+grafico(dados, 'm6', 'Importância de eventos\n culturais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de atividades em outras entidades
+
+90 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de atividade em outras entidades
+
+```{r}
+table_distribution(dados, 'm7', 'Importância de atividades em outras entidades')
+```
+
+### Gráfico de barras para importância de atividade em outras entidades
+
+```{r}
+grafico(dados, 'm7', 'Importância de atividades em\n outras entidades') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de convênios
+
+89 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de convênios
+
+```{r}
+table_distribution(dados, 'm8', 'Importância de convênios')
+```
+
+### Gráfico de barras para importância de convênios
+
+```{r}
+grafico(dados, 'm8', 'Importância de convênios') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da assessoria jurídica
+
+90 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância da assessoria jurídica
+
+```{r}
+table_distribution(dados, 'm9', 'Importância da assessoria jurídica')
+```
+
+### Gráfico de barras para importância da assessoria jurídica
+
+```{r}
+grafico(dados, 'm9', 'Importância da assessoria\n jurídica') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de atividades de cuidado
+
+90 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de atividade de cuidado
+
+```{r}
+table_distribution(dados, 'm10', 'Importância de atividades de cuidado')
+```
+
+### Gráfico de barras para importância de atividades de cuidado
+
+```{r}
+grafico(dados, 'm10', 'Importância  de atividades\n de cuidado') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de plano de saúde
+
+91 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de plano de saúde
+
+```{r}
+table_distribution(dados, 'm11', 'Importância de plano de saúde')
+```
+
+### Gráfico de barras para importância de plano de saúde
+
+```{r}
+grafico(dados, 'm11', 'Importância de plano de saúde') +
+  coord_flip()
+```
+
+
+\cleardoublepage
+
+## Importância de aliança/apoio a movimentos sociais
+
+88 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de aliança/apoio a movimentos sociais
+
+```{r}
+table_distribution(dados, 'm12', 'Importância de aliança/apoio a movimentos sociais')
+```
+
+### Gráfico de barras para importância de aliança/apoio a movimentos sociais
+
+```{r}
+grafico(dados, 'm12', 'Importância de aliança/apoio\n a movimentos sociais') +
+  coord_flip()
+```
+
