@@ -1,5 +1,6 @@
 ---
-title: "Análise inicial -- APUB"
+title: "Relatório preliminar -- APUB"
+font-size: 10pt
 output:
   bookdown::pdf_document2:
     toc: false
@@ -10,9 +11,8 @@ editor_options:
 
 ## Pacotes usados
 
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE, cache = TRUE, fig.align = "center")
 library(readxl)
 library(readr)
 library(openxlsx)
@@ -30,7 +30,7 @@ source('generic.R')
 3. Retirei os docentes que não responderam o regime de trabalho (20, 40 ou DE).
 
 
-```{r, echo=TRUE}
+```{r}
 dados <- read.csv("resultados.csv")
 
 ## filtrando os campos 15 e 16
@@ -92,36 +92,37 @@ dados <- dados[2:nrow(dados), ] %>%
 
 ```
 
-Total de respondentes.
-
 ```{r}
-nrow(dados)
+nrow(dados) %>% 
+  knitr::kable(format = 'pipe', align = 'c', col.names = 'Número total de respondentes')
 ```
 
 ## Análise Descritiva de cada uma das variáveis
 
-Encaminhamento:
-
-Vou começar a estudar cada uma das variáveis individualmente.
-
-Análise bidimensional ==> Cultura política e carreira: é aposentado ou ativo. Entre os ativos: DE, turno parcial (20 e 40 horas).
-  * Campos: 15 e 16 (tem que responder);
-
-Campo 11 (formação de graduação): agrupar por áreas (verificar com a empresa junior).
-Bolsa da APUB.
-Comprovante de estudante. Pró-rata da bolsa de IC. (250 reais)
-Bolsista auxiliar.
-
-Prazo: entrega parcial -- 17/11/2020.
-Retorno: entrega completa em fevereiro.
+Nesta primeira fase, vamos focar na análise descritiva unidimensional: tabela de distribuição de frequência, medidas de resumo (quando for possível) e gráfico de barras.
 
 \cleardoublepage
 
 ## Idade
 
-Aqui um docente respondeu a idade e foi excluída da análise.
+Um docente informou a idade e foi excluído(a) da análise descritiva para **Idade**.
 
-### Tabela de distribuição de frequência
+A maioria dos professores é jovem com idade entre 35 anos e 59 anos, conforme a tabela de distribuição de frequências e gráfico de barras.
+
+Usei uma aproximação conservadora para calcular as medidas de resumo para **Idade**.  Ou seja, eu assumi que todos os profesores tem idade na faixa **45 a 59 anos.** tem **45** anos. A idade média dos respondentes foi aproximadamente de 42 anos e e idade mediana foi aproximadamente de 45 anos, com coeficiente de variação de $27\%$.
+
+A variável _idade_ corresponde à questão número 2 com enunciado dado por:
+
+> Qual a sua idade?
+>
+> - 21 a 34 anos
+> - 35 a 44 anos
+> - 45 a 59 anos
+> - 60 a 70 anos
+> - Acima de 70 anos
+
+
+### Tabela de distribuição de frequências
 
 ```{r, fig.align='center'}
 
@@ -135,17 +136,16 @@ table_distribution(dados %>% filter(idade != ''), 'idade', 'Idade')
 df <- dados %>% 
   filter(idade != '') %>% 
   mutate(idade = recode(idade,
-                        '45 a 59 anos.' = '52',
-                        '35 a 44 anos.' = '39.5',
-                        '60 a 70 anos.' = '65',
-                        '21 a 34 anos.' = '27.5',
+                        '45 a 59 anos.' = '45',
+                        '35 a 44 anos.' = '35',
+                        '60 a 70 anos.' = '60',
+                        '21 a 34 anos.' = '21',
                         'Acima dos 70 anos.' = '70') %>% as.numeric()) 
 
 df %>%
   summarise(`Idade média` = mean(idade), `Idade mediana` = median(idade), `Desvio Padrão` = sd(idade), `Coeficiente de variação` = `Desvio Padrão` / `Idade média`) %>% 
   knitr::kable(digits = 2, format = 'pipe', format.args = list(decimal.mark = ','), align = 'c')
 ```
-
 
 ### Gráfico de barras para Idade
 
@@ -159,26 +159,45 @@ grafico(dados %>% filter(idade != ''), 'idade', 'Idade') +
 
 ## Gênero
 
-Três docentes não informaram o seu gênero e foram retirados na análise da variável _gênero._
+Três docentes não informaram o gênero que eles(as) se identiticam e foram retirados(as) na análise da variável _gênero._
 
-#### Tabela de distribuição de frequência para Gênero
+A maioria dos respondentes se identificam com o gênero _feminino_ com quase $60\%$ dos respondentes, como podemos verficar na tabela de distribuição de frequências e gráfico de barras.
+
+A variável _gênero_ corresponde a questão de número e que tem o seguinte enunuciado:
+
+> Gênero com o qual você se identifica:
+>
+> - Feminino.
+> - Masculino.
+> - Não binário.
+> - Outros.
+
+### Tabela de distribuição de frequências para Gênero
+
 
 ```{r}
 table_distribution(dados %>% filter(genero != ''), 'genero', 'Gênero')
 ```
 
-#### Gráfico de barra para Gênero
+### Gráfico de barras para Gênero
 
 ```{r fig.align='center'}
 grafico(dados %>% filter(genero != ''), 'genero', 'Gênero') +
-  scale_y_continuous(breaks = seq(from = 0, to = 65, by = 5))
+  scale_y_continuous(breaks = seq(from = 0, to = 65, by = 5)) +
+  coord_flip()
 ```
 
 \cleardoublepage
 
 ## Estado de origem
 
-Vinte e uma pessoas não informaram o _estado de origem_ e foram removidos da análise de _estado de origem_. 
+Vinte e uma pessoas não informaram o _estado de origem_ e foram removidas da análise de _estado de origem_. 
+
+A maioria dos respondentes nasceram no estado da Bahia com quase $60\%$ dos respondentes, seguidos por São Paulo,  Rio de Janeiro e Minas Gerais, que estão entre os mais populosos do Brasil e concentram as principais universidades públicas do país.
+
+A variável _estado de origem_ corresponde a questão de número 4 com enunciado dado por:
+
+> Se você nasceu no Brasil, em qual Estado?
 
 ### Tabela de distribuição de frequência para Estado de origem
 
@@ -191,6 +210,7 @@ table_distribution(dados %>% filter(estado != ''), 'estado', 'Estado')
 ```{r}
 grafico(dados %>% filter(estado != ''), 'estado', 'Estado') +
   scale_y_continuous(breaks = seq(from = 0, to = 70, by = 10)) +
+  theme(axis.title.x = element_text(size = 10)) +
   coord_flip()
 ```
 
@@ -198,7 +218,18 @@ grafico(dados %>% filter(estado != ''), 'estado', 'Estado') +
 
 ## Rede de ensino
 
-Seis docentes nao informaram se já tiveram experiência na rede de ensino básica.
+Seis docentes não informaram se estudaram na rede de ensino básica, e não foram considerados na análise descritiva desta variável.
+
+Outro fato importante é que uma proporção relevante dos respondentes que hoje trabalham na UFBA estudaram na rede privada. E maioria dos docentes estudaram, em algum momento, na rede privada de ensino básico. Os docentes que estudaram exclusivamente na rede pública de ensino é uma minoria.
+
+A variável _rede de ensino_ corresponde a questão de número 4 cujo ensino é descrito abaixo:
+
+> Você estudou em Rede Pública ou Rede Privada nos Ensinos Fundamental e Médio?
+>
+> - Rede privada.
+> - Rede Pública.
+> - Ambas as redes (Pública e Privada).
+> - Outras.
 
 ### Tabela de distribuição de frequência para Rede de ensino
 
@@ -218,7 +249,24 @@ grafico(dados %>% filter(rede_ensino != ''), 'rede_ensino', 'Rede de ensino') +
 
 ## Escolaridade do pai
 
-Retirei dois professores na análise dessa variável, pois eles responderam a escolaridade dos pais.
+Retirei dois professores na análise dessa variável, pois eles responderam a escolaridade dos pai.
+
+Aproximadamente $60\%$ dos pais dos docentes têm, pelo menos, ensino médio completo e mais da metade destes pais tem ensino superior, ou seja, os pais dos respondentes fazem parte da pequena parcela da população brasileira que tem ensino superior.
+
+A variável _escolaridade do pai_ corresponde a questão de número 6 com enuncidado dado por:
+
+> Qual o nível de escolaridade alcançado por seu pai?
+>
+> - Ensino fundamental incompleto.
+> - Ensino fundamental completo.
+> - Ensino médio incompleto.
+> - Ensino médio completo.
+> - Ensino superior incompleto.
+> - Ensino superior completo.
+> - Ensino técnico de nível médio.
+> - Pós-graduação.
+> - Sem escolaridade.
+> - Não sabe.
 
 ### Tabela de distribuição de frequência para a Escolaridade do pai
 
@@ -240,6 +288,24 @@ grafico(dados %>% filter(escolaridade_pai != ''), 'escolaridade_pai', 'Escolarid
 
 Retirei três professores na análise da variável, pois eles não responderam a escolaridade da mãe.
 
+Aproximadamente $60\%$ dos mães dos docentes têm, pelo menos, ensino médio completo e aproximadamente metade destas mães tem ensino superior, ou seja, as mães dos respondentes fazem parte da pequena parcela da população brasileira que tem ensino superior.
+
+A variável _escolaridade do mãe_ corresponde a questão de número 6 com enuncidado dado por:
+
+> Qual o nível de escolaridade alcançado por seu mãe?
+>
+> - Ensino fundamental incompleto.
+> - Ensino fundamental completo.
+> - Ensino médio incompleto.
+> - Ensino médio completo.
+> - Ensino superior incompleto.
+> - Ensino superior completo.
+> - Ensino técnico de nível médio.
+> - Pós-graduação.
+> - Sem escolaridade.
+> - Não sabe.
+
+
 ### Tabela de distribuição de frequência para a Escolaridade da mãe
 
 ```{r}
@@ -258,7 +324,22 @@ grafico(dados %>% filter(escolaridade_mae != ''), 'escolaridade_mae', 'Escolarid
 
 ## Raça
 
-Retirei três professores que não informaram a sua raça.
+Retirei três professores da análise desta variável que não informaram a sua raça.
+
+A proporção de pessoas brancas e pessoas negras (pardas e pretas) foi aproximadamente igual, com docentes indígenas.
+
+A variável _raça_ corresponde a questão de número 8 com enunciado dado por:
+
+> De acordo com os critérios estabelecidos pelo IBGE, como você se reconhece em termos de cor ou raça?
+>
+> - Branca.
+> - Preta. 
+> - Amarela.
+> - Parda.
+> - Indígena.
+> - Sem declaração.
+
+
 
 ### Tabela de distribuição de frequência para Raça
 
@@ -276,9 +357,22 @@ grafico(dados, 'raca', 'Raça') +
 
 \cleardoublepage
 
-## Domicílio
+## Condição do domicílio
 
-Retirei os quatro docentes que não informaram a condição do Domicílio.
+Retirei os quatro docentes na análise desta variável, pois não informaram a condição do Domicílio.
+
+Quase $70\%$ dos respondentes ou tem imóvel próprio ou estão pagando o financiamento do seu imóvel, ou seja, apenas uma minoria dos respondentes não tem imóvel próprio.
+
+A variável _condição do domícílio_ corresponde à questão de número 9 com enunciado dado por:
+
+> Qual a condição de domicílio em que você vive?
+> 
+> - Alugado.
+> - Cedido/emprestado.
+> - Próprio.
+> - Próprio financiado.
+> - Não sei.
+> - Prefiro não responder.
 
 ### Tabela de distribuição de frequência para a Condição do domicílio
 
@@ -296,14 +390,28 @@ grafico(dados, 'domicilio', 'Condição do domicílio') +
 
 \cleardoublepage
 
-## Filhos
+## Número de filhos
 
-Retirei quatro professores que não responderam a questão número de filhos.
+Para a análise desta variável, retirei quatro professores que não responderam a questão _número de filhos._ Além disso, eu adotei uma abordagem conservadora para calcular as medidas resumo: para a categoria **0 (tem filhos, mas não mora)** e **Não tenho filho/a.** eu assumi que o respondentes tem **0** filhos, e para a categoria **Acima de 5.** eu assumi que o respondentes tem **5** filhos.
+
+O número médio de filhos por docente é aproximadamente 0,71 filho por docente e número mediano de filhos por docente é 9, com coeficiente de variação de $1,26$. Além disso, mais de $50\%$ dos docentes tem $0$ filhos.
+
+A variável _número de filhos_ correspondente a questão de número 9 com enunciado dado por:
+
+> Você tem filhos? Se sim, quantos morando com você?
+>
+> - 0 (tem filhos, mas não mora)
+> - 1
+> - 2
+> - 3
+> - 4
+> - Acima de 5. 
+> - Não tenho filho/a.
 
 ### Tabela de distribuição de frequência para o número de filhos
 
 ```{r}
-table_distribution(dados, 'filhos', 'Filhos')
+table_distribution(dados, 'filhos', 'Número de filhos')
 ```
 
 ### Aproximando o número de filhos
@@ -312,13 +420,14 @@ table_distribution(dados, 'filhos', 'Filhos')
 dados %>%
   mutate(n_filhos = recode(filhos,
          '0 (tem filhos, mas não mora)' = '0',
-         'Não tenho filho/a.' = '1',
+         'Não tenho filho/a.' = '0',
          'Acima de 5.' = '5')) %>%
   filter(n_filhos != '') %>%
   mutate(n_filhos = as.numeric(n_filhos)) %>% 
   summarize(`Número médio de filhos` = mean(n_filhos),
             `Número mediano de filhos` = median(n_filhos),
-            `Desvio padrão` = sd(n_filhos)) %>%
+            `Desvio padrão` = sd(n_filhos), 
+            `Coeficiente de variação` = `Desvio padrão` / `Número médio de filhos`) %>%
   knitr::kable(digits = 2, format = 'pipe', align = rep('c', 3),
                format.args = list(decimal.mark = ','))
 ```
@@ -327,7 +436,7 @@ dados %>%
 ### Gráfico de barras para o número de filhos
 
 ```{r}
-grafico(dados, 'filhos', 'Filhos') +
+grafico(dados, 'filhos', 'Número de filhos') +
   scale_y_continuous(breaks = seq(from = 0, to = 40, by = 5)) +
   coord_flip()
 ```
@@ -1865,6 +1974,257 @@ table_distribution(dados, 'm12', 'Importância de aliança/apoio a movimentos so
 
 ```{r}
 grafico(dados, 'm12', 'Importância de aliança/apoio\n a movimentos sociais') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de divulgação de atividades científicas
+
+89 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de divulgação de atividades científicas
+
+```{r}
+table_distribution(dados, 'm13', 'Importância de divulgação de atividades científicas')
+```
+
+### Gráfico de barras para importância de divulgação de atividades científicas
+
+```{r}
+grafico(dados, 'm13', 'Importância de divulgação\n de atividades científicas') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de apoio financeiro a ações políticas
+
+91 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de apoio financeiro a ações políticas
+
+```{r}
+table_distribution(dados, 'm14', 'Importância de apoio financeiro a ações políticas')
+```
+
+### Gráficos de barras para importância de apoio financeiro a ações políticas
+
+```{r}
+grafico(dados, 'm14', 'Importância de apoio\n financeiro a ações políticas')+
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de apoio financeiro a ações acadêmicas
+
+92 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de apoio financeiro a ações acadêmicas
+
+```{r}
+table_distribution(dados, 'm15', 'Importância de apoio financeiro a ações acadêmicas')
+```
+
+### Gráfico de barras para importância de apoio financeiro a ações acadêmicas
+
+```{r}
+grafico(dados, 'm15', 'Importância de apoio financeiro\n a ações acadêmicas') +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Importância da organização das eleições para Reitoria.
+
+95 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância da organização das eleições para Reitoria
+
+```{r}
+table_distribution(dados, 'm16', 'Importância da organização das eleições para Reitoria')
+```
+
+### Gráfico de barras para importância da organização das eleições para Reitoria
+
+```{r}
+grafico(dados, 'm16', 'Importância da organização\n das eleições para Reitoria') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de participar em comissões eleitorais universitárias
+
+98 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de participar em comissões eleitorais universitárias
+
+```{r}
+table_distribution(dados, 'm17', 'Importância de participar em comissões eleitorais universitárias')
+```
+
+### Gráfico de barras para importância de participar em comissões eleitorais universitárias
+
+```{r}
+grafico(dados, 'm17', 'Importância de participar em\n comissões eleitorais universitárias') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância de indicar membros de OSC
+
+91 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de indicar membros OSC
+
+```{r}
+table_distribution(dados, 'm18', 'Importância de indicar membros de OSC')
+```
+
+### Gráfico de barras para importância de indicar membros OSC
+
+```{r}
+grafico(dados, 'm18', 'Importância de indicar membros\n de OSC') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Importância da formação política+sindical
+
+92 pessoas não responderam esse item e foram removidas da análise deste campo.
+
+### Tabela de distribuição de frequências para importância de formação política+sindical
+
+```{r}
+table_distribution(dados, 'm19', 'Importância da formação política+sindical')
+```
+
+### Gráfico de barras para importância de formação política+sindical
+
+```{r}
+grafico(dados, 'm19', 'Importância da formação\n política+sindical') +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Prioridades da UFBA
+
+Campo do tipo _caixa de seleção_.
+
+### Tabela de distribuição de frequências para Prioridades da UFBA
+
+```{r}
+df <- tribble(~`Prioridades da UFBA`,~`Frequência`,
+              'Defesa da Universidade e carreira', sum(dados$Em.sua.opinião..quais.devem.ser.as.três.prioridades.da.APUB.na.conjuntura.atual...MARQUE.ATÉ.TRÊS.OPÇÕES.INDEPENDENTE.DA.FILIAÇÃO. != ''),
+              'Criação de parcerias e convênios', sum(dados$n1 != ''),
+              'Novos canais de comunicação', sum(dados$n2 != ''),
+              'Plano de saúde', sum(dados$n3 != ''),
+              'Assessoria jurídica', sum(dados$n4 != ''),
+              'Eventos sociais e culturais', sum(dados$n5 != ''),
+              'Valorização da extensão', sum(dados$n6 != ''),
+              'Conquistas coletivas e salariais', sum(dados$n7 != ''),
+              'Ampliar participação política', sum(dados$n8 != ''),
+              'Cursos de formação sindical', sum(dados$n9 != ''),
+              'Cuidado e saúde docente', sum(dados$n10 != '')) %>% 
+  arrange(desc(`Frequência`))
+
+df %>% knitr::kable(format = 'pipe', align = 'c')
+```
+
+### Gráfico de barras para Prioridades da UFBA
+
+```{r}
+ggplot(df) +
+  geom_bar(aes(`Prioridades da UFBA`, `Frequência`), stat = 'identity', fill = 'blue') +
+  scale_y_continuous(breaks = seq(from = 0, to = 1000, by = 100)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
+```
+
+\cleardoublepage
+
+## Filiação partidária
+
+66 pessoas não responderam se possui filiação partidária.
+
+### Tabela de distribuição de frequências para Filiação partidária
+
+```{r}
+table_distribution(dados, 'Você.possui.vínculo.filiação.com.algum.partido.político.', 'Filiação partidária')
+```
+
+### Gráfico de barras para Filiação partidária
+
+```{r}
+grafico(dados, 'Você.possui.vínculo.filiação.com.algum.partido.político.', 'Filiação partidária') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Participação de movimentos sociais
+
+66 pessoas não responderam se participa dos movimentos sociais.
+
+### Tabela de distribuição de frequências para participação de movimentos sociais
+
+```{r}
+table_distribution(dados, 'Você.participa.de.maneira.orgânica.de.movimentos.sociais....ambientalista..feminista..sindical..antirracista..etc..', 'Participação de movimentos sociais')
+```
+
+### Gráficos de barras para participação de movimentos sociais
+
+```{r}
+grafico(dados, 'Você.participa.de.maneira.orgânica.de.movimentos.sociais....ambientalista..feminista..sindical..antirracista..etc..', 'Participação de movimentos\n sociais') +
+  scale_y_continuous(breaks = seq(from = 0, to = 100, by = 10)) +
+  coord_flip()
+
+```
+
+\cleardoublepage
+
+## Graduação
+
+Retirei o campo _ Outros._ e quem não repondeu a pergunta: um total de 24 pessoas.
+
+Tem um total de 75 cursos, então agrupei os cursos pela área do conhecimento.
+
+### Tabela de distribuição de frequências para Graduação
+
+```{r}
+df <- dados %>% 
+  select(Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.) %>% 
+  rename('Graduação' = 'Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.') %>% 
+  filter(`Graduação` != '' & `Graduação` != 'Outro.')
+
+area_conhecimento <- read.xlsx('bolsista/cursos.xlsx')
+
+area_conhecimento <- area_conhecimento %>% 
+  rename(
+    'Graduação' = 'Cursos.de.graduação',
+    'UFBA' = 'Área.de.concentração.-.UFBA',
+    'CAPES' = 'Áreas.do.conhecimento.-.CAPES'
+  )
+
+df <- df %>% left_join(area_conhecimento, by = 'Graduação')
+
+table_distribution(df, 'CAPES', 'Área do conhecimento - CAPES')
+
+```
+
+### Gráfico de barras para Graduação
+
+```{r}
+grafico(df, 'CAPES', 'Área do conhecimento\n CAPES') +
   coord_flip()
 ```
 
