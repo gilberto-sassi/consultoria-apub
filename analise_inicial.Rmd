@@ -94,22 +94,22 @@ dados <- dados[2:nrow(dados), ] %>%
 
 ```{r}
 nrow(dados) %>% 
-  knitr::kable(format = 'pipe', align = 'c', col.names = 'Número total de respondentes')
+  knitr::kable(format = 'pipe', align = 'c', col.names = 'Número total de respondentes considerados')
 ```
 
 ## Análise Descritiva de cada uma das variáveis
 
-Nesta primeira fase, vamos focar na análise descritiva unidimensional: tabela de distribuição de frequência, medidas de resumo (quando for possível) e gráfico de barras.
+Nesta primeira fase, vamos focar na análise descritiva unidimensional: tabela de distribuição de frequência, medidas de resumo (quando for possível) e gráfico de barras. Este documento é preliminar, e será concluído no semestre 2021.1.
 
 \cleardoublepage
 
 ## Idade
 
-Um docente informou a idade e foi excluído(a) da análise descritiva para **Idade**.
+Um docente não informou a idade e foi excluído(a) da análise descritiva para **Idade**.
 
 A maioria dos professores é jovem com idade entre 35 anos e 59 anos, conforme a tabela de distribuição de frequências e gráfico de barras.
 
-Usei uma aproximação conservadora para calcular as medidas de resumo para **Idade**.  Ou seja, eu assumi que todos os profesores tem idade na faixa **45 a 59 anos.** tem **45** anos. A idade média dos respondentes foi aproximadamente de 42 anos e e idade mediana foi aproximadamente de 45 anos, com coeficiente de variação de $27\%$.
+Usei uma aproximação conservadora para calcular as medidas de resumo para **Idade**.  Por exemplo, eu assumi que todos os profesores tem idade na faixa **45 a 59 anos.** tem **45** anos. A idade média dos respondentes foi aproximadamente de 42 anos e e idade mediana foi aproximadamente de 45 anos, com coeficiente de variação de $27\%$.
 
 A variável _idade_ corresponde à questão número 2 com enunciado dado por:
 
@@ -161,7 +161,7 @@ grafico(dados %>% filter(idade != ''), 'idade', 'Idade') +
 
 Três docentes não informaram o gênero que eles(as) se identiticam e foram retirados(as) na análise da variável _gênero._
 
-A maioria dos respondentes se identificam com o gênero _feminino_ com quase $60\%$ dos respondentes, como podemos verficar na tabela de distribuição de frequências e gráfico de barras.
+Aproximadamente $60\%$ respondentes se identificam com o gênero _feminino_.
 
 A variável _gênero_ corresponde a questão de número e que tem o seguinte enunuciado:
 
@@ -191,7 +191,7 @@ grafico(dados %>% filter(genero != ''), 'genero', 'Gênero') +
 
 ## Estado de origem
 
-Vinte e uma pessoas não informaram o _estado de origem_ e foram removidas da análise de _estado de origem_. 
+Vinte e uma pessoas não informaram o _estado de origem_ e foram removidas da análise descritiva desta variável. 
 
 A maioria dos respondentes nasceram no estado da Bahia com quase $60\%$ dos respondentes, seguidos por São Paulo,  Rio de Janeiro e Minas Gerais, que estão entre os mais populosos do Brasil e concentram as principais universidades públicas do país.
 
@@ -220,7 +220,7 @@ grafico(dados %>% filter(estado != ''), 'estado', 'Estado') +
 
 Seis docentes não informaram se estudaram na rede de ensino básica, e não foram considerados na análise descritiva desta variável.
 
-Outro fato importante é que uma proporção relevante dos respondentes que hoje trabalham na UFBA estudaram na rede privada. E maioria dos docentes estudaram, em algum momento, na rede privada de ensino básico. Os docentes que estudaram exclusivamente na rede pública de ensino é uma minoria.
+Uma proporção relevante dos respondentes que hoje trabalham na UFBA estudaram na rede privada. E a maioria dos docentes estudaram, em algum momento, na rede privada de ensino básico. Os docentes que estudaram exclusivamente na rede pública de ensino é uma minoria.
 
 A variável _rede de ensino_ corresponde a questão de número 4 cujo ensino é descrito abaixo:
 
@@ -251,7 +251,7 @@ grafico(dados %>% filter(rede_ensino != ''), 'rede_ensino', 'Rede de ensino') +
 
 Retirei dois professores na análise dessa variável, pois eles responderam a escolaridade dos pai.
 
-Aproximadamente $60\%$ dos pais dos docentes têm, pelo menos, ensino médio completo e mais da metade destes pais tem ensino superior, ou seja, os pais dos respondentes fazem parte da pequena parcela da população brasileira que tem ensino superior.
+Aproximadamente $60\%$ dos pais dos docentes têm, pelo menos, ensino médio completo e mais da metade destes pais tem ensino superior, ou seja, os pais dos respondentes fazem parte da pequena parcela da população brasileira com ensino médio ou superior. 
 
 A variável _escolaridade do pai_ corresponde a questão de número 6 com enuncidado dado por:
 
@@ -286,9 +286,9 @@ grafico(dados %>% filter(escolaridade_pai != ''), 'escolaridade_pai', 'Escolarid
 
 ## Escolaridade da mãe
 
-Retirei três professores na análise da variável, pois eles não responderam a escolaridade da mãe.
+Retirei três professores na análise da _escolatidade da mãe_, pois eles não informaram a _escolaridade da mãe_.
 
-Aproximadamente $60\%$ dos mães dos docentes têm, pelo menos, ensino médio completo e aproximadamente metade destas mães tem ensino superior, ou seja, as mães dos respondentes fazem parte da pequena parcela da população brasileira que tem ensino superior.
+Aproximadamente $60\%$ dos mães dos docentes têm, pelo menos, ensino médio completo e aproximadamente metade destas mães tem ensino superior, ou seja, as mães dos respondentes fazem parte da pequena parcela da população brasileira que tem ensino médio ou  superior.
 
 A variável _escolaridade do mãe_ corresponde a questão de número 6 com enuncidado dado por:
 
@@ -324,9 +324,9 @@ grafico(dados %>% filter(escolaridade_mae != ''), 'escolaridade_mae', 'Escolarid
 
 ## Raça
 
-Retirei três professores da análise desta variável que não informaram a sua raça.
+Retirei três professores da análise da variável _raça_, pois não informaram a sua raça.
 
-A proporção de pessoas brancas e pessoas negras (pardas e pretas) foi aproximadamente igual, com docentes indígenas.
+A proporção de pessoas brancas e pessoas negras (pardas e pretas) foi aproximadamente igual, com uma presença de docentes indígenas.
 
 A variável _raça_ corresponde a questão de número 8 com enunciado dado por:
 
@@ -414,7 +414,7 @@ A variável _número de filhos_ correspondente a questão de número 9 com enunc
 table_distribution(dados, 'filhos', 'Número de filhos')
 ```
 
-### Aproximando o número de filhos
+### Medidas de resumo para  o número de filhos
 
 ```{r}
 dados %>%
@@ -443,7 +443,59 @@ grafico(dados, 'filhos', 'Número de filhos') +
 
 \cleardoublepage
 
+## Graduação
+
+Retirei 12 professores que escolheram a opção _Outros._ e 12 professores que não reponderam a questão de número 11 em um total de 24 pessoas.
+
+A variação _graduação_ tem um total de 75 cursos, então agrupei os cursos pela área do conhecimento da CAPES com ajuda de um bolsita pago pela APUB. Alguns cursos de graduação, eu e o bolsista ficamos em duúvida. No arquivo **cursos.xlsx**, explicitamos como agrupamos os cursos por **Área de conhecimento**. 
+
+Notamos uma forte predominância dos cursos de humanidades e de saúde, e poucos docentes de exatas, biológicas e agrárias responderam ao questionário.
+
+A variável _graduação_ correspondente à questão de número 11 com enunciado dado por:
+
+> Qual a sua principal graduação cursada? Caso tenha mais de uma, indique a mais importante para a sua carreira docente.
+
+### Tabela de distribuição de frequências para Graduação
+
+```{r}
+df <- dados %>% 
+  select(Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.) %>% 
+  rename('Graduação' = 'Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.') %>% 
+  filter(`Graduação` != '' & `Graduação` != 'Outro.')
+
+area_conhecimento <- read.xlsx('bolsista/cursos_title.xlsx')
+
+area_conhecimento <- area_conhecimento %>% 
+  rename(
+    'Graduação' = 'Cursos.de.graduação',
+    'UFBA' = 'Área.de.concentração.-.UFBA',
+    'CAPES' = 'Áreas.do.conhecimento.-.CAPES'
+  )
+
+df <- df %>% left_join(area_conhecimento, by = 'Graduação')
+
+table_distribution(df, 'CAPES', 'Área do conhecimento - CAPES')
+
+```
+
+### Gráfico de barras para Graduação
+
+```{r}
+grafico(df, 'CAPES', 'Área do conhecimento\n CAPES') +
+  coord_flip()
+```
+
+\cleardoublepage
+
 ## Titulação
+
+Acredito que os respondentes tiveram dificuldade de entender a questão de número 12, pois nove respondentes afirmaram que não tinham ensino superior: o que é impossível para um servidor docente. 
+
+A maioria dos respondentes tem doutorado e já realizaram pelo menos um estágio de pós-doutorado. Merece destaque a proporção de respondentes que tem apenas a graduação ($21\%$). O número médio de títulos de doutorado é $0,93$ e o número mediano de título de doutorado é $1$.
+
+A variável _titulação_ da questão de número 12 com enunciado dado por:
+
+> Preencha a quantidade de títulos e estágios pós-doutorais obtidos por você:
 
 ### Tabela de distribuição de frequência para Titulação
 
@@ -459,7 +511,7 @@ grafico(dados, 'titulacao', 'Titulação') +
   coord_flip()
 ```
 
-### Número média das titulações
+### Medidas de resumo para a variável Titulação
 
 ```{r}
 dados %>% select(`Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.obtidos.por.você.`, x, x1, x2, x3) %>%
@@ -490,6 +542,8 @@ dados %>% select(`Preencha.a.quantidade.de.títulos.e.estágios.pós.doutorais.o
 
 ## Campus
 
+A maioria dos respondentes, quase $80\%$, trabalham em algum dos campi da UFBA em Salvador.
+
 ### Tabela de distribuição de frequência para Campus
 
 ```{r}
@@ -508,7 +562,22 @@ grafico(dados, 'campus', 'Campus') +
 
 ## Distância do trabalho
 
-Retirei cinco professores que não informaram a distância do trabalho.
+Para a variável _distãncia do trabalho_,  retirei cinco professores que não informaram a distância do trabalho.
+
+A maioria dos respondentes moram a uma distância de até 15 quilômetros da UFBA. 
+
+Para calcular as medidas de resumo, usamos uma abordagem conservadora. Por exemplo, assumimos que os respondentes que escolheram a opção **1-5 km** moram a **1** quilômetro da UFBA. A distância média do trabalho foi $8,21$ quilômetros e a distância mediana do trabalho foi $5$ quilômetros, com coeficiente de variação de $1,64$.
+
+A variável _distância do trabalho_ é questão de número 14 com enunciado dado por:
+
+> Qual a estimativa de distância entre a sua moradia e o local de trabalho?
+> 
+> - Até 1 km.
+> - 1-5 km.
+> - 5-15 km
+> - 15-30 km.
+> - 30-50 km.
+> - Acima dos 50 km.
 
 ### Tabela de distribuição de frequência para Distância do trabalho
 
@@ -524,19 +593,20 @@ df <- dados %>%
 
 df <- df %>% 
   mutate(distancia_trabalho = recode(distancia_trabalho,
-                                     '1-5 km.' = '3',
-                                     '5-15 km' = '10',
-                                     '15-30 km.' = '22.5',
+                                     '1-5 km.' = '1',
+                                     '5-15 km' = '5',
+                                     '15-30 km.' = '15',
                                      'Acima dos 50 km.' = '50',
-                                     'Até 1 km.' = '1',
-                                     '30-50 km.' = '40') ) %>% 
+                                     'Até 1 km.' = '0',
+                                     '30-50 km.' = '30') ) %>% 
   filter(distancia_trabalho != '') %>% 
   mutate(distancia_trabalho = as.numeric(distancia_trabalho))
 
 df %>% summarise(`Distância média do trabalho` = mean(distancia_trabalho),
                  `Distância mediana do trabalho` = median(distancia_trabalho),
                  `Desvio padrão` = sd(distancia_trabalho),
-                 `Coeficiente de variação` = `Desvio padrão` / `Distância média do trabalho`)
+                 `Coeficiente de variação` = `Desvio padrão` / `Distância média do trabalho`) %>% 
+  knitr::kable(format = 'pipe', align = 'c', digits = 2, format.args = list(decimal.mark = ','))
 ```
 
 
@@ -548,20 +618,32 @@ grafico(dados, 'Qual.a.estimativa.de.distância.entre.a.sua.moradia.e.o.local.de
   coord_flip()
 ```
 
+\cleardoublepage
+
 ## Tipo de vínculo
 
-### Tabela de distribuição de frequência para Vínculo
+Todos os respondentes são docentes efetivos.
 
-Só tem professo efetivo na amostra.
+### Tabela de distribuição de frequência para Vínculo
 
 ```{r}
 table_distribution(dados, 'Qual.o.seu.vínculo.com.a.Universidade.', 'Vínculo')
 ```
 
-
 \cleardoublepage
 
 ## Regime de trabalho
+
+Quase $90\%$ dos respondentes são docentes com regime de trabalho _Dedicação Exclusiva_, e nenhum professor visitante respondeu a este questionário.
+
+A variável _regime de trabalho_ corresponde a questão de número 16 com enunciado dado por:
+
+> Você recebe remuneração de qual regime de trabalho?
+> 
+> - 20h.
+> - 40h.
+> - Dedicação Exclusiva.
+
 
 ### Tabela de distribuição de frequência para Regime de trabalho
 
@@ -580,7 +662,21 @@ grafico(dados, 'Você.recebe.remuneração.de.qual.regime.de.trabalho..', 'Regim
 
 ## Estágio na carreira
 
-Um professor não informou qual o estágio na carreira e foi removido para esta questão.
+Um professor não informou qual o estágio na carreira e foi removido na análise descritiva desta variável.
+
+A maioria dos respondentes estão no começo da carreira (classe A, B e C), e tem uma proporção relevante de professores na classe E ($20\%$).
+
+A variável _estágio na carreira_ correspondente à questão de número 17 com enunciado dado por:
+
+> Em qual estágio você se encontra na carreira (classe/nível)?
+>
+> - Classe E - denominação Professor Titular [nível único]
+> - Classe D - Professor Associado [níveis 1, 2, 3 e 4]
+> - Classe C - Professor Adjunto [níveis 1, 2, 3 e 4]
+> - Classe B - Professor Assistente [níveis 1 e 2]
+> - Classe A - Professor Auxiliar, Professor Assistente A ou Professor Adjunto A (depende da titulação) - [níveis 1 e 2)
+> - Não sabe.
+
 
 ### Tabela de distribuição de frequência para Estágio na Carreira
 
@@ -598,17 +694,63 @@ grafico(dados, 'carreira', 'Estágio na carreira') +
 
 \cleardoublepage
 
-## Experiência no ensino básico público
+## Experiência docente _antes_ do vínculo na Universidade atual?
 
+Vamos dividir a análise desta variável em seis casos:
 
+* Experiência no ensino básico público
+* Experiência no ensino básico privado
+* Experiência nos institutos federais
+* Universidades e Faculdades privadas
+* Universidades estaduais
+* Universidades federais
 
-### Tabela de distribuição de frequência para Experiência no ensino básico público
+### Experiência no ensino básico público
+
+274 respondentes não informaram a experiência docente no ensino básico público, e foram removidos na análise descritiva da variável _experiência no ensino básico público_. 
+
+Mais de $60\%$ dos professores nao tiveram experiência docente no ensino básico público.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem **1** ano de experiência docente no ensino básico público. A média de experiência docente no ensino básico público é $1,36$ anos e a mediana de experiência docente no ensino básico público é $0$ anos, com coeficiente de variação $2,47$.
+
+A variável _experiência no ensino básico público_ correspondente a opção 
+
+> Rede pública de Educação Básica.
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+#### Tabela de distribuição de frequência para Experiência no ensino básico público
 
 ```{r}
 table_distribution(dados, 'ens_basico_publico', 'Experiência no ensino básico público')
 ```
 
-### Gráfico de barras para Experiência no ensino básico público
+#### Medidas de resumo para Experiência no ensino básico público
+
+```{r}
+df <- dados %>% 
+  filter(ens_basico_publico != '') %>% 
+  select(ens_basico_publico) %>% 
+  mutate(basico = recode(ens_basico_publico,
+                         'Nenhum.' = '0',
+                         'Até 1 ano.' = '0',
+                         '12 a 16 anos.' = '12',
+                         '8 a 12 anos.' = '8',
+                         '1 a 4 anos.' = '1',
+                         'Acima de 16 anos.' = '16',
+                         '4 a 8 anos' = '4') %>% as.numeric())
+
+df %>%
+  summarise(`Média` = mean(basico), Mediana = median(basico), 
+            `Desvio padrão` = sd(basico), `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', digits = 2, align = 'c',
+               format.args = list(decimal.mark = ','))
+```
+
+
+#### Gráfico de barras para Experiência no ensino básico público
 
 ```{r}
 grafico(dados, 'ens_basico_publico', 'Experiência no ensino básico\n público') +
@@ -618,15 +760,52 @@ grafico(dados, 'ens_basico_publico', 'Experiência no ensino básico\n público'
 
 \cleardoublepage
 
-## Experiência no ensino básico privado
+### Experiência no ensino básico privado
 
-### Tabela de distribuição de frequência para Experiência no ensino básico privado
+301 respondentes não informaram a experiência docente no ensino básico público, e foram removidos na análise descritiva da variável _experiência no ensino básico privado_.
+
+Quase $70\%$ dos professores não tiveram experiência docente no ensino básico privado.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem **1** ano de experiência docente no ensino básico privado. A média de experiência docente no ensino básico privado é $0,816$ anos e a mediana de experiência docente no ensino básico privado é $0$ anos, com coeficiente de variação $3,09$.
+
+A variável _experiência no ensino básico privado_ correspondente a opção 
+
+> Rede Privada de Educação Básica.
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+#### Tabela de distribuição de frequência para Experiência no ensino básico privado
 
 ```{r}
 table_distribution(dados, 'ens_basico_privado', 'Experiência no ensino básico privado')
 ```
 
-### Gráfico de barras para Experiência no ensino básico privado
+#### Medidas de resumo para Experiência no ensino básico privado
+
+```{r}
+df <- dados %>% 
+  select(ens_basico_privado) %>% 
+  filter(ens_basico_privado != '') %>% 
+  summarise(privado = recode(ens_basico_privado,
+                             'Nenhum.' = '0',
+                             '1 a 4 anos.' = '1',
+                             'Até 1 ano.' = '0',
+                             '4 a 8 anos' = '4',
+                             '8 a 12 anos.' = '8',
+                             'Acima de 16 anos.' = '16',
+                             '12 a 16 anos.' = '12') %>% as.numeric())
+
+df %>% 
+  summarise(`Média` = mean(privado), Mediana = median(privado), 
+            `Desvio padrão` = sd(privado), `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', digits = 2, align = 'c', format.args = list(decimal.mark = ','))
+
+```
+
+
+#### Gráfico de barras para Experiência no ensino básico privado
 
 ```{r}
 grafico(dados, 'ens_basico_privado', 'Experiência no ensino básico\n privado') +
@@ -636,15 +815,50 @@ grafico(dados, 'ens_basico_privado', 'Experiência no ensino básico\n privado')
 
 \cleardoublepage
 
-## Experiência nos Institutos Federais
+### Experiência nos Institutos Federais
 
-### Tabela de distribuição de frequência para Experiência nos IFs
+358 respondentes não informaram a experiência docente nos institutos federais, e foram removidos na análise descritiva da variável _experiência no instituto federal_.
+
+Quase $90\%$ dos professores não tiveram experiência docente no instituto federal.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem **1** ano de experiência docente no instituto federal. A média de experiência docente no instituto federal é $0,2$ anos e a mediana de experiência docente no instituto federal é $0$ anos, com coeficiente de variação $6,16$.
+
+A variável _experiência no instituto federal_ correspondente a opção 
+
+> Institutos Federais (antigo CEFET)
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+#### Tabela de distribuição de frequência para Experiência nos IFs
 
 ```{r}
 table_distribution(dados, 'IFs', 'Experiência nos Institutos Federais')
 ```
 
-### Gráfico de barras para Experiência nos IFs
+#### Medidas de resumo para Experiência nos IFs
+
+```{r}
+df <- dados %>% 
+  select(IFs) %>% 
+  filter(IFs != '') %>% 
+  mutate(IF = recode(IFs,
+                     'Nenhum.' = '0',
+                     '1 a 4 anos.' = '1',
+                     'Até 1 ano.' = '0',
+                     '4 a 8 anos' = '4',
+                     '12 a 16 anos.' = '12',
+                     '8 a 12 anos.' = '8',
+                     'Acima de 16 anos.' = '16') %>% as.numeric())
+
+df %>% 
+  summarise(`Média` = mean(IF), Mediana = median(IF),
+            `Desvio padrão` = sd(IF), `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', align = 'c', digits = 2, format.args = list(decimal.mark = ','))
+```
+
+#### Gráfico de barras para Experiência nos IFs
 
 ```{r}
 grafico(dados, 'IFs', 'Experiência nos Institutos\n Federais') +
@@ -654,15 +868,52 @@ grafico(dados, 'IFs', 'Experiência nos Institutos\n Federais') +
 
 \cleardoublepage
 
-## Experiência no Ensino Superior Privado
+### Experiência no Ensino Superior Privado
 
-### Tabela de distribuição de frequência para Ensino Superior Privado
+160 respondentes não informaram a experiência docente no ensino superior privado, e foram removidos na análise descritiva da variável _experiência no ensino superior privado_.
+
+Mais de $70\%$ dos professores tiveram até quatro ano de experiência no ensino superior privado.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem **1** ano de experiência docente no instituto federal. A média de experiência docente no ensino superior privado é $2,16$ anos e a mediana de experiência docente no ensino superior privado é $1$ anos, com coeficiente de variação $1,66$.
+
+A variável _experiência no ensino superior privado_ correspondente a opção 
+
+> Faculdades e Universidades Particulares.
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+#### Tabela de distribuição de frequência para Experiência no ensino superior privado
 
 ```{r}
 table_distribution(dados, 'ens_superior_privado', 'Experiência no ensino superior privado')
 ```
 
-### Gráfico de barras para Ensino superior privado
+#### Medidas de resumo para Experiência no ensino superior privado
+
+```{r}
+df <- dados %>% 
+  select(ens_superior_privado) %>% 
+  filter(ens_superior_privado != '') %>% 
+  mutate(sup_privado = recode(ens_superior_privado,
+                              'Nenhum.' = '0',
+                     '1 a 4 anos.' = '1',
+                     'Até 1 ano.' = '0',
+                     '4 a 8 anos' = '4',
+                     '12 a 16 anos.' = '12',
+                     '8 a 12 anos.' = '8',
+                     'Acima de 16 anos.' = '16') %>% as.numeric())
+
+df %>% 
+  summarise(`Média` = mean(sup_privado), Mediana = median(sup_privado),
+            `Desvio padrão` = sd(sup_privado),
+            `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', align = 'c', digits = 2, format.args = list(decimal.mark = ','))
+```
+
+
+#### Gráfico de barras para Experiência no ensino superior privado
 
 ```{r}
 grafico(dados, 'ens_superior_privado', 'Experiência no ensino\n superior privado') +
@@ -670,15 +921,55 @@ grafico(dados, 'ens_superior_privado', 'Experiência no ensino\n superior privad
   coord_flip()
 ```
 
-## Experiência nas Universidades Estaduais
+\cleardoublepage
 
-### Tabela de distribuição de frequência para Experiência nas Universidades Estaduais
+### Experiência nas Universidades Estaduais
+
+302 respondentes não informaram a experiência docente nas universidades estudais, e foram removidos na análise descritiva da variável _experiência nas universidades estudais_.
+
+Quase $70\%$ dos professores não tiveram  experiência docentes nas universidades estaduais.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem **1** ano de experiência docente no instituto federal. A média de experiência docente nas universidades estaduais é $0,94$ anos e a mediana de experiência docente nas universidades estaduais é $0$ anos, com coeficiente de variação $3,01$.
+
+A variável _experiência nas universidades estaduais_ correspondente a opção 
+
+> Universidades Estaduais.
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+
+#### Tabela de distribuição de frequência para Experiência nas Universidades Estaduais
 
 ```{r}
 table_distribution(dados, 'universidade_estadual', 'Experiência nas universidades estaduais')
 ```
 
-### Gráfico de barras para Experiência nas Universidades Estaduais
+#### Medidas de resumo para Experiência nas Universidades Estaduais
+
+```{r}
+df <- dados %>% 
+  select(universidade_estadual) %>% 
+  filter(universidade_estadual != '') %>% 
+  mutate(estadual = recode(universidade_estadual,
+                           'Nenhum.' = '0',
+                     '1 a 4 anos.' = '1',
+                     'Até 1 ano.' = '0',
+                     '4 a 8 anos' = '4',
+                     '12 a 16 anos.' = '12',
+                     '8 a 12 anos.' = '8',
+                     'Acima de 16 anos.' = '16') %>% as.numeric())
+
+df %>% 
+  summarise(`Média` = mean(estadual), Mediana = median(estadual),
+            `Desvio padrão` = sd(estadual),
+            `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', align = 'c', digits = 2, format.args = list(decimal.mark = ','))
+```
+
+
+#### Gráfico de barras para Experiência nas Universidades Estaduais
 
 ```{r}
 grafico(dados, 'universidade_estadual', 'Experiência nas universidades\n estaduais') +
@@ -686,15 +977,55 @@ grafico(dados, 'universidade_estadual', 'Experiência nas universidades\n estadu
   coord_flip()
 ```
 
-## Experiência nas Universidades Federais
+\cleardoublepage
 
-### Tabela de distribuição de frequência para Experiência nas Universidades Federais
+### Experiência nas Universidades Federais
+
+224 respondentes não informaram a experiência docente nas universidades ferderais, e foram removidos na análise descritiva da variável _experiência nas universidades federaiss_.
+
+Mais $50\%$ dos professores tiveram  experiência docente nas universidades federais.
+
+Para calcular as medidas de resumo, usamos uma abordagem convervadora. Por exemplo, assumi que respondentes que escolheram a opção **1 a 4 anos.** tem um ano de experiência docente no instituto federal. A média de experiência docente nas universidades federais é $1,11$ anos e a mediana de experiência docente nas universidades federais é $0$ anos, com coeficiente de variação $2,45$.
+
+A variável _experiência nas universidades federais_ correspondente a opção 
+
+> Universidades Federais.
+
+da questão de número 18 com enunciado:
+
+> Você teve experiência docente antes do vínculo na universidade atual?
+
+
+#### Tabela de distribuição de frequência para Experiência nas Universidades Federais
 
 ```{r}
 table_distribution(dados, 'universidade_federal', 'Experiência nas universidades federais')
 ```
 
-### Gráfico de barras para Experiência nas Universidades Federais
+#### Medidas de resumo para Experiência nas Universidades Federais
+
+```{r}
+df <- dados %>% 
+  select(universidade_federal) %>% 
+  filter(universidade_federal != '') %>% 
+  mutate(federal = recode(universidade_federal,
+                          'Nenhum.' = '0',
+                     '1 a 4 anos.' = '1',
+                     'Até 1 ano.' = '0',
+                     '4 a 8 anos' = '4',
+                     '12 a 16 anos.' = '12',
+                     '8 a 12 anos.' = '8',
+                     'Acima de 16 anos.' = '16') %>% as.numeric())
+
+df %>% 
+  summarise(`Média` = mean(federal), Mediana = median(federal),
+            `Desvio padrão` = sd(federal),
+            `Coeficiente de variação` = `Desvio padrão` / `Média`) %>% 
+  knitr::kable(format = 'pipe', align = 'c', digits = 2, format.args = list(decimal.mark = ','))
+```
+
+
+#### Gráfico de barras para Experiência nas Universidades Federais
 
 ```{r}
 grafico(dados, 'universidade_federal', 'Experiência nas universidades\n federais') +
@@ -705,6 +1036,39 @@ grafico(dados, 'universidade_federal', 'Experiência nas universidades\n federai
 \cleardoublepage
 
 ## Atividades como aposentado
+
+O campo _atividades como aposentado_ corresponde a questão de número 19 com enunciado dado por:
+
+> Sendo aposentado/a, quais as atividades você desenvolve na Universidade no momento?
+> 
+> - Não Se Aplica (NSA).
+> - Atuação em Pesquisa ligada à Programa de Pós-Graduação.
+> - Docência na Graduação.
+> - Docência na Pós-Graduação Lato Sensu.
+> - Docência na Pós-Graduação Stricto Sensu.
+> - Editoria de Revistas científicas.
+> - Ocupação de Conselhos, Cargos de Gestão e Assessoramento.
+> - Atuação em Sindicato (Direção, Grupos de Trabalho, Comissões, Conselhos, etc.)
+> - Participação em comissões institucionais da Universidade (eventos científicos, planejamento, reuniões, etc.).
+> - Nenhuma das alternativas anteriores.
+> - Outro (especifique)
+
+Este campo é do tipo _caixa de seleção_, e não é possível comparar as respostas da questão de número 19 com outras questões do questionário.  Abaixo, mostramos quantas vezes cada uma das opções foram selecionadas. Alem disso, algumas das opções tem um texto muito longo para colocar em uma tabela e um gráfico de barras, e usamos as seguintes formas abrevidas:
+
+|Texto completo|Texto abreviado|
+|:-------------|:--------------|
+|Não Se Aplica (NSA).|Não se aplica|
+|Atuação em Pesquisa ligada à Programa de Pós-Graduação.|Pesquisa na Pós-graduação|
+|Docência na Graduação.|Docência na Graduação|
+|Docência na Pós-Graduação Lato Sensu.|Docência: Lato Sensu|
+|Docência na Pós-Graduação Stricto Sensu.|Docência: Stricto Sensu|
+|Editoria de Revistas científicas.|Editoria de Revistas científicas.|
+|Ocupação de Conselhos, Cargos de Gestão e Assessoramento.|Conselhos, Cargos de gestão, Assessoramento|
+|Atuação em Sindicato (Direção, Grupos de Trabalho, Comissões, Conselhos, etc.)|Atuação na APUB|
+|Participação em comissões institucionais da Universidade (eventos científicos, planejamento, reuniões, etc.).|Comissões institucionais|
+|Nenhuma das alternativas anteriores.|Nenhuma das alternativas anteriores.|
+
+Abaixo, mostramos quantas vezes cada uma das opções foram selecionadas.
 
 ### Tabela de disribuição de frequência para Atividade como aposentado
 
@@ -731,9 +1095,9 @@ atividades %>% knitr::kable(digits = 0, format.args = list(decimal.mark = ','),
 ggplot(atividades) +
   geom_bar(aes(x = `Atividade como aposentado`, y = `frequência`), stat = 'identity',
            fill = 'blue') +
-  scale_y_continuous(breaks = seq(from = 0, to = 500, by = 150)) +
-  theme(axis.title = element_text(size = 20),
-        axis.text = element_text(size = 15)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 1000, by = 100)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
   coord_flip()
 ```
 
@@ -741,7 +1105,17 @@ ggplot(atividades) +
 
 ## Tempo na UFBA
 
-### Medidas de resumo para o Tempo de vínculo
+15 docentes escolheram a opção **Não se aplica.** da questão de número 20, além disso construimos a variável _tempo de vínculo_ que é diferença entre 2020 e o _ano de posse do respondente_. 
+
+A variável _tempo de vínculo_ tem muitos valores distintos, e para facilitar a visualização na tabela de distribuição de frequência e no gráfico de barras, agrupamos os valores em faixas de largura de cinco anos. A maioria dos respondentes entraram na Universidade a partir de 2010, e quase $30\%$ entraram na Universidade depois de 2013 quando passou a vigorar a lei 12772 que restringiu o salário dos docentes em estágio probatório.
+
+O tempo médio de vínculo a universidade é $12,69$ anos e o tempo mediano de vínculo com a universidade é $10$ anos, com coeficiente de variação $0,86$. Além disso, notamos uma assimetria à direita no histograma do tempo de vínculo.
+
+Contruímos a variável _tempo de vínculo_ usando a variável _ano de posse do respondente_ que corresponde a questão de número 20 cujo enunciado é:
+
+> Sendo efetivo ou aposentado, em que ano você tomou posse na Universidade a qual está vinculado atualmente?
+
+### Tabela de distribuição de frequências para o Tempo de vínculo
 
 ```{r}
 df_tempo <- dados %>%
@@ -750,23 +1124,37 @@ df_tempo <- dados %>%
   mutate(tempo = recode(tempo, 'Não Se Aplica.' = '')) %>%
   mutate(tempo = as.numeric(tempo)) %>%
   mutate(tempo_vinculo = 2020 - tempo) %>%
-  filter(!is.na(tempo_vinculo))
+  filter(!is.na(tempo_vinculo)) %>% 
+  mutate(tempo_classe = cut(tempo_vinculo,
+                            breaks = seq(from = 0, to = 55, by = 5),
+                            include.lowest = TRUE, right = FALSE) %>% as.character())
+
+table_distribution(df_tempo, 'tempo_classe', 'Tempo de vínculo')
+
+```
+
+
+### Medidas de resumo para o Tempo de vínculo
+
+```{r}
 
 df_tempo %>%
-  summarise(`Média` = mean(tempo_vinculo), `Desvio padrão` = sd(tempo_vinculo), Mediana = median(tempo_vinculo),
-            `Primeiro Quartil` = quantile(tempo_vinculo, probs = 0.25), `Terceiro Quartil` = quantile(tempo_vinculo, probs = 0.75)) %>%
+  summarise(`Tempo médio de vínculo` = mean(tempo_vinculo), 
+            `Tempo mediano de vínculo` = median(tempo_vinculo),
+            `Desvio padrão` = sd(tempo_vinculo),
+            `Coeficiente de variação` = `Desvio padrão` / `Tempo médio de vínculo`) %>%
   knitr::kable(digits = 2, format = 'pipe', align = 'c', format.args = list(decimal.mark = ','))
 
 ```
 
-### Gráfico de barras para Tempo de vínculo
+### Histograma para Tempo de vínculo
 
 ```{r}
 ggplot(df_tempo) +
-  geom_bar(aes(tempo_vinculo), fill = 'blue') +
-  labs(x = 'Tempo de vínculo com a UFBA', y = 'Frequência') +
-  scale_y_continuous(breaks = seq(from = 0, to = 50, by = 3)) +
-  scale_x_continuous(breaks = seq(from = 0, to = 50, by = 3)) +
+  geom_histogram(aes(tempo_vinculo, ..density..),
+                 closed = 'left', breaks = seq(from = 0, to = 60, by = 5), fill = 'blue') +
+  scale_x_continuous(breaks = seq(from = 0, to = 60, by = 5)) + 
+  labs(x = 'Tempo de vínculo', y = 'Densidade de frequência') +
   theme(axis.title = element_text(size = 20),
         axis.text = element_text(size = 15))
 ```
@@ -775,11 +1163,32 @@ ggplot(df_tempo) +
 
 ## Atividades antes da pandemia
 
-### Tabela de distribuição de frequência para Atividades antes da pandemia
+A variável _atividades antes da pandemia_ corresponde a questão de número 21, e esta variável é do tipo _caixa de seleção_ e não podemos fazer análises estatísticas mais elaboradas. O que podemos fazer é contar quantas vezes cada opção foi selecionada pelos respondentes. 
 
-Podia marcar várias opções para esta pergunta. Fiquei confuso para responder e para analisar essa pergunta.
+Como os textos das opções da questão de número 21 é muito longo, e usamos um texto abreviado conforme a tabela abaixo.
 
-Minha interpretação: se a pessoa respondeu, ela realiza a tarefa. Essa questão é do tipo _caixa de seleção_, e não temos muito o que fazer.
+|Texto original|Texto abreviado|
+|:--------------------------|:----------------------------------|
+|Aulas presenciais na graduação.|Aula: graduação|
+|Aulas presenciais na Pós-Graduação|Aula: Lato Sensu|
+|Atuação na modalidade de Ensino á Distância (EAD).|Aula: EAD|
+|Atuação na Gestão da Universidade.|Gestão da Universidade|
+|Leitura e resposta de e-mails institucionais e mensagens de whatsapp.|Emails + WhatApp|
+|Leitura de jornais e sites de notícias atinentes à Universidade e Educação.|Leitura de jornal|
+|Reuniões presenciais de Colegiado e Comissões.|Reuniões: colegiados e comissões|
+|Emissão de pareceres e participação em bancas examinadoras.|Pareceres + Bancas examinadoras|
+|Leitura de artigos, relatórios e livros para fins acadêmicos.|Revista Acadêmica|
+|Escrita de artigos, relatórios e livros para fins acadêmicos.|Escrita de artigo|
+|Participação em comitê editorial e/ou comissão científica.|Comitê editorial/Comitê de científico|
+|Organização de eventos locais, regionais, nacionais e internacionais.|Organização de eventos|
+|Participação em eventos científicos (ouvinte, palestrante, mediação de mesa, etc.)|Organização de eventos|
+|Preparação de aulas e avaliações|Preparação de aula|
+|Atividades de Pesquisa (reuniões, linhas de pesquisa, orientações, etc.)|Atividades de pesquisa|
+|Atividades de Extensão.|Atividades de extensão|
+
+A seguir mostramos a contagem de cada uma das opções da questão de número 21.
+
+### Tabela de distribuição de frequências para Atividades antes da pandemia
 
 ```{r}
 dados1 <- dados %>%
@@ -796,7 +1205,7 @@ df_antes_pandemia <- tribble(~Atividade, ~`Frequência`,
                              'Pareceres + Bancas examinadoras', sum(dados1$b7 != '' & dados1$b7 != 'Não se Aplica.'),
                              'Revista Acadêmica', sum(dados1$b8 != '' & dados1$b8 != 'Não se Aplica.'),
                              'Escrita de artigo', sum(dados1$b9 != '' & dados1$b9 != 'Não se Aplica.'),
-                             'Comitê editorial/Comitê de Ética', sum(dados1$b10 != '' & dados1$b10 != 'Não se Aplica.'),
+                             'Comitê editorial/Comitê de científico', sum(dados1$b10 != '' & dados1$b10 != 'Não se Aplica.'),
                              'Organização de eventos', sum(dados1$b11 != '' & dados1$b11 != 'Não se Aplica.'),
                              'Publicação de evento', sum(dados1$b12 != '' & dados1$b12 != 'Não se Aplica.'),
                              'Preparação de aula', sum(dados1$b13 != '' & dados1$b13 != 'Não se Aplica.'),
@@ -808,13 +1217,13 @@ df_antes_pandemia %>%
 
 ```
 
-### Gráfico de barras para Tempo de vínculo
+### Gráfico de barras para Atividades antes da pandemia
 
 ```{r}
 ggplot(df_antes_pandemia) +
   geom_bar(aes(x = `Atividade`, y = `Frequência`), stat = 'identity',
            fill = 'blue') +
-  scale_y_continuous(breaks = seq(from = 0, to = 500, by = 150)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 1000, by = 100)) +
   theme(axis.title = element_text(size = 20),
         axis.text = element_text(size = 15)) +
   coord_flip()
@@ -824,7 +1233,21 @@ ggplot(df_antes_pandemia) +
 
 ## Satisfação com UFBA
 
-Aqui retirei 41 professores que não responderam ou que responderam **Não se Aplica (NSA)**.
+ 41 docentes não responderam ou que escolheram a opção **Não se Aplica (NSA)** e foram desconsiderados para a análise descritiva da variável _satisfação com Universidade_.
+ 
+ Mais de $60\%$ dos respondentes afirmaram estarem instisfeitos ou pouco satisfeitos em trabalhar na Universidade, indicando a grave precarização do trabalho docente no ensino superior público federal.
+ 
+ A variável _satisfação com Universidade_ corresponde a questão de número 22 com enunciado dado por:
+ 
+ > Avalie sua satisfação/insatisfação no que tange as suas condições de trabalho docente neste momento de pandemia.
+>
+> - Insatisfeito/a.
+> - Pouco satisfeito/a.
+> - Satisfeito/a.
+> - Muito satisfeito/a.
+> - Prefiro não responder.
+> - Não sabe.
+> - Não Se Aplica (NSA).
 
 ### Tabela de distribuição de frequência para Satistação com UFBA
 
@@ -834,13 +1257,13 @@ tab <- dados %>%
   rename(satisfacao_ufba = Avalie.sua.satisfação.insatisfação.no.que.tange.as.suas.condições.de.trabalho.docente.neste.momento.de.pandemia...Marque.Não.Se.Aplica..NSA...caso.seja.aposentado.a.) %>%
   filter(satisfacao_ufba != '' & satisfacao_ufba != 'Não Se Aplica (NSA).')
 
-table_distribution(tab, 'satisfacao_ufba', 'Satisfação com UFBA')
+table_distribution(tab, 'satisfacao_ufba', 'Satisfação com Universidade')
 ```
 
 ### Gráfico de barras para Satisfação com UFBA
 
 ```{r}
-grafico(tab, 'satisfacao_ufba', 'Satisfação com UFBA') +
+grafico(tab, 'satisfacao_ufba', 'Satisfação com Universidade') +
   scale_y_continuous(breaks = seq(from = 0, to = 50, by = 5)) +
   coord_flip()
 ```
@@ -849,19 +1272,36 @@ grafico(tab, 'satisfacao_ufba', 'Satisfação com UFBA') +
 
 ## Maior insatisfação
 
-Retirei 24 professores que não informaram a maior insatisfação com a UFBA.
+24 professores que não informaram a maior insatisfação com a UFBA e 101 professores escolheram a opção _Outra._ e foram desconsiderados na análise descritiva da variável _maior insatisfação_.
 
-### Tabela de distribuição de frequência para Maior insatisfação
+Mais de $50\%$ dos docentes afirmaram que a maior insatisfação na universidade é a _infraestrutura inadequada_, seguida das opções _Falta de incentivo de pesquisa_ e _Relações interpessoais_, com aproximadamente $20\%$ e $10\%$ dos respondentes respectivamente. 
+
+A variável _maior insatisfação_ corresponde a questão de número 23 com enunciado dado por:
+
+> Em geral, especifique (MARCAR PRINCIPAL) a sua maior insatisfação decorrente do trabalho na Universidade.
+> 
+> - Falta de incentivo para a pesquisa.
+> - Falta de incentivo para a extensão.
+> - Infraestrutura inadequada para desenvolver o trabalho (espaço, instalações, equipamentos, internet, etc.)
+> - Plano de carreira e Salário não valem a pena.
+> - Dificuldade nas relações interpessoais.
+> - Outra.
+> - Prefiro não responder.
+
+
+### Tabela de distribuição de frequências para Maior insatisfação
 
 ```{r}
-table_distribution(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA')
+table_distribution(dados %>% filter(maior_insatisfacao != 'Outra.'), 'maior_insatisfacao', 'Maior insatisfação na Universidade')
 ```
 
 ### Gráfico de barras para Maior insatisfação
 
 ```{r}
-grafico(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA') +
+grafico(dados %>% filter(maior_insatisfacao != 'Outra.'), 'maior_insatisfacao', 'Maior insatisfação na Universidade') +
   scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
   coord_flip()
 ```
 
@@ -869,7 +1309,18 @@ grafico(dados, 'maior_insatisfacao', 'Maior insatisfação na UFBA') +
 
 ## Estresse nas relações interpessoais
 
-Retirei 28 professores que não responderam ou que responderam **Não se Aplica (NSA).**
+Retirei 28 professores que não responderam esta variável ou escolheram a opção **Não se Aplica (NSA).**
+
+Mais de $70\%$ dos respondentes indicaram que enfrentam dificuldades e estresse nas relações interpessoais.
+
+A variável _estresse nas relações interpessoais_ da questão de número 24 com enunciado dado por:
+
+> Na sua rotina de trabalho na universidade, você reconhece atitudes de estresse nas relações interpessoais?
+> 
+> - Não.
+> - Sim.
+> - Não sabe.
+> - Prefiro não responder.
 
 ### Tabela de distribuição de frequência para Estresse nas relações interpessoais
 
@@ -883,7 +1334,7 @@ table_distribution(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relaç�
 ### Gráfico de barras para Estresse nas relações interpessoais
 
 ```{r}
-grafico(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações interpessoais') +
+grafico(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações\n interpessoais') +
   scale_y_continuous(breaks = seq(from = 0, to = 80, by = 10)) +
   coord_flip()
 ```
@@ -892,7 +1343,18 @@ grafico(tab, 'estresse_relacoes_interpessoais', 'Estresse nas relações interpe
 
 ## Acompanhamento psicológico ou psiquiátrico
 
-Retirei 20 professores que não responderam essa questão.
+Desconderei 20 respondentes que não responderam a questão de número 25.
+
+Uma proporção alta (quase $40\%$) dos docentes procuram acompanhamento psicólogico ou psiquiátrico, e isso pode estar relacionado aos problemas enfretados no ambiente de trabalho.  Verifiquei esta hipótese na segunda fase da análise deste conjunto de dados.
+
+A variável _acompanhamento psicológico ou psiquiátrico_ corresponde a questão de número 25 com enunciado dado por:
+
+> Nos últimos três anos, você buscou acompanhamento psicológico ou psiquiátrico?
+> 
+> - Não.
+> - Sim.
+> - Não sabe.
+> - Prefiro não responder.
 
 ### Tabela de distribuição de frequência para Acompanhamento psicológico ou psiquiátrico
 
@@ -903,8 +1365,11 @@ table_distribution(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.
 ### Gráfico de barras para Acompanhamento psicológico ou psiquiátrico
 
 ```{r}
-grafico(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológico.ou.psiquiátrico.', 'Acompanhamento psicológico ou psiquiátrico') +
-  scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5))
+grafico(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológico.ou.psiquiátrico.', 'Acompanhamento psicológico\n ou psiquiátrico') +
+  scale_y_continuous(breaks = seq(from = 0, to = 60, by = 5)) +
+  theme(axis.title = element_text(size = 15),
+        axis.text = element_text(size = 10)) +
+  coord_flip()
 
 ```
 
@@ -912,7 +1377,17 @@ grafico(dados, 'Nos.últimos.três.anos..você.buscou.acompanhamento.psicológic
 
 ## Plano de saúde
 
-Retirei 20 professores que não responderam esse campo.
+20 professores, que não responderam essa variável, foram desconsiderados na análise descritiva desta variável.
+
+Quase $90\%$ dos professores tem algum tipo de plano de saúde. 
+
+A variável _plano de saúde_ corresponde a questão de número 26 com enunciado:
+
+> Você possui Plano de Saúde?
+> 
+> - Não.
+> - Sim.
+> - Prefiro não responder.
 
 ### Tabela de distribuição de frequência para Plano de saúde
 
@@ -931,9 +1406,17 @@ grafico(dados, 'plano_saude', 'Plano de saúde') +
 
 ## Carga horária excessiva
 
-24 professores não responderam esse campo e foram removidos neste campo.
+24 professores não responderam esse campo e foram desconsiderados na análise descritiva desta variável.
 
-### Tabela de distribuição de frequência para Carga horária excessiva
+Mais de $60\%$ dos respondentes indicaram que enfrentam uma carga horária semanal excessiva, conforme podemos verificar na tabela de distribuição de frequências e o gráfico de barras. 
+
+> Você percebe que a sua carga horária semanal excede o previsto no seu regime de trabalho?
+> 
+> - Não.
+> - Sim.
+> - Não sabe.
+
+### Tabela de distribuição de frequências para Carga horária excessiva
 
 ```{r}
 table_distribution(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')
@@ -951,7 +1434,23 @@ grafico(dados, 'carga_horaria_excessiva', 'Carga horária excessiva')+
 
 ## Renda mensal familiar
 
-Retirei 21 professores que não informaram a renda mensal familiar.
+21 professores que não informaram a renda mensal familiar e foram desconsiderados para a análise descritiva desta variável.
+
+Aparentemente, a maioria, mais de $80\%$, dos respondentes estão no estágio inicial da carreira nas classes A ou C.
+
+Para calcular as medidas de resumo, usamos uma abordagem conservadora. Por exemplo, assumi que os respondentes que escolheram a opção **Entre R$ 6.101,07 e R$ 10.448,00** ganham **R$ 6.101,07**. A renda média mensal familiar é **R$ 9.895,07 ** e a renda mediana familiar e **R$ 10.448,01**, com coeficiente de variação de $0,56$.
+
+A variável _renda mensal familiar_ corresponde a questão de número 28 com enunciado dado por:
+
+> Qual a sua renda familiar?
+> 
+> - Entre 1 salário mínimo e R$ 2.089,60
+> - Entre R$ 2.089,61 e R$ 3.134,40
+> - Entre R$ 3.134,41 e R$ 6.101,06
+> - Entre R$ 6.101,07 e R$ 10.448,00
+> - Entre R$ 10.448,01 e R$ 20.896,00
+> - Entre R$ 20.896,01 e R$ 40.747,20
+> - Acima de R$ 40.747,21
 
 ### Tabela de distribuição para Renda mensal familiar
 
@@ -965,12 +1464,12 @@ table_distribution(dados, 'Qual.a.sua.renda.familiar.', 'Renda mensal familiar')
 df <- dados %>% 
   rename('renda_familiar' = 'Qual.a.sua.renda.familiar.') %>% 
   mutate(renda_familiar = recode(renda_familiar, 
-                                 'Entre R$ 10.448,01 e R$ 20.896,00' = '15672.01',
-                                 'Entre R$ 6.101,07 e R$ 10.448,00' = '8274.54',
-                                 'Entre R$ 20.896,01 e R$ 40.747,20' = '30821.61',
-                                 'Entre R$ 3.134,41 e R$ 6.101,06' = '4617.74',
-                                 'Acima de R$ 40.747,21' = '50000',
-                                 'Entre R$ 2.089,61 e R$ 3.134,40' = '2612.01')) %>%
+                                 'Entre R$ 10.448,01 e R$ 20.896,00' = '10448.01',
+                                 'Entre R$ 6.101,07 e R$ 10.448,00' = '6101.07',
+                                 'Entre R$ 20.896,01 e R$ 40.747,20' = '20896.01',
+                                 'Entre R$ 3.134,41 e R$ 6.101,06' = '3134.41',
+                                 'Acima de R$ 40.747,21' = '40747.21',
+                                 'Entre R$ 2.089,61 e R$ 3.134,40' = '2089.61')) %>%
   mutate(renda_familiar = as.numeric(renda_familiar)) %>% 
   filter(!is.na(renda_familiar))
 
@@ -996,6 +1495,10 @@ grafico(dados, 'Qual.a.sua.renda.familiar.', 'Renda mensal familiar') +
 \cleardoublepage
 
 ## Ensino
+
+Esta variável _ensino_ corresponde a questão de número 29 que é um campo do tipo _caixa de seleção_, e não é possível aplicar análises estatísticas mais elaboradas e apenas podemos contar quantas vezes cada opção foi selecionada. 
+
+
 
 ### Tabela de distribuição de frequência para Ensino
 
@@ -1025,9 +1528,27 @@ ggplot(tabe) +
   coord_flip()
 ```
 
+\cleardoublepage
+
 ## Orientações
 
-Variável complicada ==> Muitos não responderam.
+Para esta variável usamos uma abordagem conservadora para calcular as medidas de resumo. Por exemplo, assumi que um docente que escolhei a opção **1-3** orientou **1** pessoa. No último três anos, os respondentes orientaram aproximadamente, em média, $1$ aluno de doutorado, $1,6$ alunos de mestrado, $2$ alunos de PET, PIBIC, PIBIT, PIBID e $3$ alunos de TCC.
+
+Os textos das opções da questão de número $30$ são muito longos, e usamos abreviações para facilitar a visualização na tabela de distribuição de frequências e o gráfico de barras, conforme tabela abaixo.
+
+|Texto original|Texto abreviado|
+|:---------------------|:-------------------------|
+|Orientação de TCC.|TCC|
+|Orientação de PET, PIBIC, PIBID e PIBIT.|PET, PIB(C, D, T)|
+|Orientação de Mestrado.|Mestrado|
+|Orientação de Doutorado.|Doutorado|
+|Outros.|Outros|
+
+A variável _orientações_ corresponde a questão de número $30$ com enunciado dado por:
+
+> Qual a média anual de orientações que você realizou nos últimos três anos?
+
+### Tabela de distribuição de frequências para Orientações
 
 ```{r}
 tribble(~`Tipo de orientação`, ~`Não respondentes`,
@@ -1036,19 +1557,14 @@ tribble(~`Tipo de orientação`, ~`Não respondentes`,
                'Mestrado', sum(dados$d2 != ''),
                'Doutorado', sum(dados$d3 != ''),
                'Outros', sum(dados$d4 != '')) %>% 
-  knitr::kable(format = 'pipe', digits = 2, align = 'c')
+  knitr::kable(format = 'simple', digits = 2, align = 'c')
 
 
 ```
 
 
-### Medidas resumo para cada tipo de orientação
+### Medidas resumo para Orientações
 
-Eu estou usando uma abordagem conservadora: estou pegando limite inferior do intervalo com sendo o valor de todo mundo da classe.
-
-Aqui retirei todas as respostas vazias (conforme tabela) e calculei a média, a mediana, o desvio padrão e coeficiente de variância.
-
-\small
 
 ```{r}
 df <- dados %>% 
@@ -1079,27 +1595,8 @@ df %>%
             `Mediana de orientações` = median(Frequência),
             `Desvio Padrão` = sd(Frequência),
             `Coeficiente de variação` = `Desvio Padrão` / `Média de orientações`, .groups = 'drop') %>% 
-  knitr::kable(format = 'simple', digits = 3, align = 'c', format.args = list(decimal.mark = ','))
+  knitr::kable(format = 'pipe', digits = 3, align = 'c', format.args = list(decimal.mark = ','))
 
-```
-
-\normalsize
-
-### Diagrama de caixa
-
-Vamos fazer o diagrama de caixa para este caso.
-
-Todas as variáveis tem média em torno de 1 e tem assimetria à direita.
-
-```{r}
-df %>%
-  filter(!is.na(Frequência)) %>%
-  ggplot() +
-  geom_boxplot(aes(x = `Tipo de orientação`, y = Frequência)) +
-  scale_y_continuous(breaks = seq(from = 0, to = 15, by = 2)) +
-  theme(axis.title = element_text(size = 20),
-        axis.text = element_text(size = 15)) +
-  coord_flip()
 ```
 
 ### Gráfico de barras
@@ -1116,7 +1613,25 @@ grafico(df %>% filter(!is.na(Frequência)), 'Frequência', 'Frequência') +
 
 ## Atividades na Universidade
 
-Variável de tipo _caixa de seleção_: vou fa fazer a tabela de distribuição de frequência.
+A variável _atividades na Universidade_  corresponde a questão de número 31 que é do tipo _caixa de seleção_. Neste caso, só é possível contar quantas vezes cada opção foi selecionada.
+
+Os textos originais das opções da questão de número 31 são muito longos para construirmos uma tabela de distribuição de frequências e o gráfico de barras, e usamos um texto abreviado conforme tabela abaixo.
+
+|Texto original|Texto abreviado|
+|:-------------------------|:------------------------------|
+|Não Se Aplica (NSA).|Não exerci atividades|
+|Coordenação de colegiado de curso de graduação|Coordenação: graduação|
+|Coordenação de área do conhecimento.|Coordenação: área do conhecimento|
+|Representante do colegiado.|Representante: colegiado|
+|Coordenação de pós-graduação lato-sensu|Coordenação: lato-sensu|
+|Coordenador de colegiado de pós-graduação stricto sensu|Coordenação: strictu sensu|
+|Chefe de departamento|Chefe de departamento|
+|Direção de unidade/faculdade|Direção de unidade|
+|Editor de revista científica|Editor de revista|
+|Líder ou vice-líder de grupo de pesquisa.|(Vice) líde de grupo de pesquisa|
+|Atividades de função/nomeação na reitoria e/ou pró-reitorias.|Função na Administração Central|
+|Atividades e consultoria em outros órgãos públicos fora da Universidade.|Consultoria|
+|Outros|Outros|
 
 
 ### Tabela de distribuição de frequência para Atividades na Universidade
@@ -1124,7 +1639,7 @@ Variável de tipo _caixa de seleção_: vou fa fazer a tabela de distribuição 
 ```{r}
 tab <- tribble(~`Atividades na Universidade`, ~`Frequência`,
                'Não exerci atividades', sum(dados$Nos.últimos.três.anos.quais.destas.atividades.você.desempenhou.na.Universidade..NSA...PARA.QUEM.NÃO.EXERCEU.NENHUMA.ATIVIDADE..INCLUSIVE.APOSENTADO.A. != ''),
-               'Coordenação: graduação.', sum(dados$e1 != ''),
+               'Coordenação: graduação', sum(dados$e1 != ''),
                'Coordenação: área do conhecimento', sum(dados$e2 != ''),
                'Representante: colegiado', sum(dados$e3 != ''),
                'Coordenação: lato-sensu', sum(dados$e4 != ''),
@@ -1132,10 +1647,11 @@ tab <- tribble(~`Atividades na Universidade`, ~`Frequência`,
                'Chefe de departamento', sum(dados$e6 != ''),
                'Direção de unidade', sum(dados$e7 != ''),
                'Editor de revista', sum(dados$e8 != ''),
-               '(Vice) líde de grupo de pesquisa', sum(dados$e9 != ''),
+               '(Vice) líder de grupo de pesquisa', sum(dados$e9 != ''),
                'Função na Administração Central', sum(dados$e10  != ''),
                'Consultoria', sum(dados$e11 != ''),
-               'Outros', sum(dados$e12 != ''))
+               'Outros', sum(dados$e12 != '')) %>% 
+  arrange(desc(`Frequência`))
 
 tab %>% 
   knitr::kable(format = 'simple', align = 'c')
@@ -1155,9 +1671,19 @@ tab %>%
 
 \cleardoublepage
 
-## Vínculo com a APUB
+## Vínculo com  APUB
 
-Retirei 19 pessoas que não informaram o vínculo com a APUB.
+19 pessoas não informaram o vínculo com APUB, e foram desconsideradas na análise desta variável.
+
+Quase $70\%$ dos professores estão filiados a sindicatos, a maioria deles estão filiados à APUB.
+
+A variável _vínculo com APUB_ corresponde a variável 32 com enunciado dado por:
+
+> Qual seu vínculo atual com a APUB?
+>
+> - Filiado à APUB.
+> - Filiado a outro sindicato.
+> - Não sou filiado a nenhum sindicato.
 
 ### Tabela de distribuição de frequência para Atividades na Universidade
 
@@ -1185,7 +1711,24 @@ grafico(dados, 'vinculo_sindicato', 'Vínculo com a APUB') +
 
 ## Motivos para filiar à APUB
 
-Campo do tipo _caixa de seleção_, não tem muito o que fazer: vou fazer uma tabela de distribuição e gráfico de barras.
+A variável _motivos para filiar à APUB_ corresponde a questão de número 33 que é um campo do tipo _caixa de seleção_. Neste caso, só é possível contar quantas vezes cada opção fo selecionada pelos respondentes. 
+
+A variável _motivos para filiar à APUB_ corresponde a questão de número 33 com enunciado dado por:
+
+> Sendo filiado à APUB, por quais motivos você decidiu se filiar ao sindicato?
+
+Algumas das opções da questão de número 33 têm texto muito longo, e usei textos abreviados para facilitar a visualização na tabela de distribuição de frequências e no gráfico de barras. A tabela abaixo explicita a relações entre o texto original das opções e o texto abreviado usado.
+
+|Texto original|Texto abreviado|
+|:-----------------------|:----------------------------|
+|Assistência/Assessoria Jurídica.|Assistência jurídica|
+|Conquista de acordo coletivo e melhorias na carreira.|Acordo coletivo|
+|Convênios (descontos em lojas e serviços).|Convênios|
+|Eventos Culturais.|Eventos culturais|
+|Formação política e/ou sindical.|Formação política/sindical|
+|Importância das Mobilizações de caráter público (atos, protestos, paralisações, reuniões, assembleias e greve).|Importância de mobilizações|
+|Convite/Indicação de colega.|Indicação de colega|
+|Reconhecimento/Valorização do papel do sindicato.|Valorização da APUB|
 
 ### Tabela de distribuição de frequência para Motivos de filiar à APUB
 
@@ -1195,8 +1738,8 @@ df <- tribble(~`Motivos de Filiação`, ~`Frequência`,
               'Acordo coletivo', sum(dados$f1 != ''),
               'Convênios', sum(dados$f2 != ''),
               'Eventos culturais', sum(dados$f3 != ''),
-              'Formação política', sum(dados$f4 != ''),
-              'Importância da mobilização', sum(dados$f5 != ''),
+              'Formação política/sindical', sum(dados$f4 != ''),
+              'Importância de mobilizações', sum(dados$f5 != ''),
               'Indicação de colega', sum(dados$f6 != ''),
               'Valorização da APUB', sum(dados$f7 != '')) %>% 
   arrange(desc(`Frequência`))
@@ -1221,9 +1764,23 @@ df %>%
 
 ## Tempo de sindicalização
 
-Retirei 10 pessoas que selecionaram _Não sabe_, e retire 292 pessoas que não responderam esta questão.
+ 10 pessoas selecionaram a opção _Não sabe_ e  292 pessoas que não responderam esta questão. Estes docentes foram desconsiderados na análise da variável _tempo de sindicalização_.
+ 
+A maioria dos respondentes se filiaram na última década, ou seja, a partir do ano 2000.
+ 
+Para calcular as medidas de resumo, usamos uma abordagem conservadora. Por exemplo, assumi que um respondente que escolheu a opção **1 a 5 anos** tem **1** ano de filiação. O tempo médio de sindicalização é de $9,75$ anos e o tempo mediano foi de $5$ anos, com coeficiente de variação de $0,95$.
 
-Adotei uma abordagem conservadora, todos que estão em faixa de valor é igual ao seu limite inferior.
+A variável _tempo de sindicalização_ corresponde a questão de 34 com enunciado:
+
+> Qual o seu tempo de sindicalização?
+>
+> - 1 a 5 anos.
+> - 5 a 10 anos.
+> - 10 a 15 anos.
+> - 15 a 20 anos.
+> - 20 a 30 anos.
+> - Mais de 30 anos.
+> - Não sabe. 
 
 ### Tabela de distribuição de frequência para Tempo de sindicalização
 
@@ -1274,7 +1831,9 @@ grafico(
 
 ## Motivos de não filiação
 
-Campo do tipo _caixa de seleção_. Não tem muito o que fazer nesse caso: Vou fazer a tabela de distribuição de frequência e o gráfico de barras. 
+A variável _motivos de não filiação_ corresponde a questão de número $35$ que é um campo do tipo _caixa de seleção_. Neste caso, apenas podemos contar quantas vezes cada opção foi selecionada pelos respondentes.  
+
+
 
 ### Tabela de distribuição de frequência para Tempo de sindicalização
 
@@ -1310,7 +1869,20 @@ tab %>%
 
 ## Filiação em 18 meses
 
-613 pessoas não responderam essa questão e foram removidas na análise deste campo.
+613 pessoas não responderam se pretendem se filiar nos próximos 18 meses e foram desconsideradas na análise descritiva deste campo.
+
+Aproximadamente de $40\%$ afirmaram que não se filiariam na APUB nos próximos 18 meses e outros $30\%$ estão indecisos. Neste contexto, podemos considerar que quase $70\%$ não tinham intenção de filiar à APUB dentro do prazo de $18$ meses.
+
+A variável _filiação em 18 meses_ corresponde a questão de número 36 com enunciado dado por:
+
+> Você que NÃO é filiado/a a um sindicato, diria que é provável se filiar nos próximos 18 meses?
+> 
+> - Sim.
+> - Provavelmente sim.
+> - Indeciso.
+> - Provavelmente não.
+> - Definitivamente não.
+> - Não Se Aplica (É filiado).
 
 ### Tabela de distribuição de frequência para Filiação em 18 meses
 
@@ -1337,15 +1909,17 @@ grafico(
 
 ## Fonte de informação
 
-Campo do tipo _caixa de seleção_. Só é possívelfazer uma tabela de distribuição de frequência e um gráfico de barras.
+A variável _fonte de informação_ corresponde a questão de número 37 que é um campo do tipo _caixa de seleção_. Neste caso, podemos apenas contar quantas vezes cada opção foi selecionada pelos respondentes.
+
 
 ### Tabela de distribuição de frequência para Fonte de informação
 
 ```{r}
 df <- tribble(~`Fonte de informação`, ~`Frequência`,
-              'Facebook', sum(dados$h1 != ''),
-              'Instagram', sum(dados$h2 != ''),
-              'Jornal', sum(dados$h3 != ''),
+              'Facebook', sum(dados$No.dia.a.dia..quais.os.três.principais.meios.de.comunicação.em.que.você.mais.se.informa...MARQUE.ATÉ.TRÊS.OPÇÕES. != ''),
+              'Instagram', sum(dados$h1 != ''), 
+              'Twitter', sum(dados$h2 != ''),
+              'Jornal impresso ou Digital', sum(dados$h3 != ''),
               'Sites e blogs', sum(dados$h4 != ''),
               'WhatsApp', sum(dados$h5 != '')) %>% 
   arrange(desc(`Frequência`))
@@ -1370,8 +1944,26 @@ df %>%
 
 ## Meio de comunicação da APUB
 
+A variável _meio de comunicação da APUB_ corresponde a questão de número 38 que é um campo do tipo _caixa de seleção_. Neste caso, podemos apenas contar quantas vezes cada opção foi selecionada pelos respondentes.
 
-Campo do tipo _caixa de seleção_.
+A variável _meio de comunicação da APUB_ corresponde a questão de número 38 cujo enunciado é dado por:
+
+> Independente da filiação à APUB, marque os meios de comunicação do sindicato acessados por você.
+
+Os textos das opções da questão de número 38 são muito longos, e optei por usar um texto abreviado para facilitar a visualização na tabela de distribuição de frequências e o gráfico de barras. 
+
+|Texto original|Texto abreviado|
+|:-----------------------|:------------------------|
+|Comunicação visual (faixas, banners, panfletos, materiais impressos, entre outros).|Comunicação visual|
+|E-mail.|E-mail|
+|Facebook.|Facebook|
+|Instagram.|Instagram|
+|Site do sindicato.|Site do sindicato|
+|Contato com dirigente sindical e/ou conselho de representante.|Contato com dirigente APUB|
+|Whatsapp.|WhatsApp|
+|Não acompanho as comunicações do sindicato.|Não acompanho as comunicações da APUB|
+
+
 
 ### Tabela de distribuição de frequência para Meio de comunicação da APUB
 
@@ -1406,17 +1998,23 @@ df %>%
 
 \cleardoublepage
 
-## Importância da assinatura de manifesto on-line
+## Grau de importância das ações políticas cotidianas
 
-82 pessoas não responderam esse item e foram removidas da análise deste campo.
+Neste campo, temos diversos aspectos das ações políticas cotidianas. Eu decidi criar uma tabela de distribuição de frequência e gráfico de barras para cada um destes aspectos, e fazer uma interpretação simplicada de cada um destes aspectos. 
 
-### Tabela de distruição de frequência para Importância de manifesto on-line
+### Importância da assinatura de manifesto on-line
+
+82 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
+
+Aproximadamente $70\%$ dos professores consideram muito importante ou importante a assinatura de manifestos on-line.
+
+#### Tabela de distruição de frequência para Importância da assinatura de manifesto on-line
 
 ```{r}
 table_distribution(dados, 'Em.geral..qual.o.grau.de.importância.você.confere.a.estas.ações.políticas.cotidianas.', 'Importância de manifesto on-line')
 ```
 
-### Gráfico de barras para Importância de manifesto on-line
+#### Gráfico de barras para Importância da assinatura de manifesto on-line
 
 ```{r}
 grafico(dados, 'Em.geral..qual.o.grau.de.importância.você.confere.a.estas.ações.políticas.cotidianas.', 'Importância de manifesto\n on-line') +
@@ -1427,17 +2025,19 @@ grafico(dados, 'Em.geral..qual.o.grau.de.importância.você.confere.a.estas.aç�
 \cleardoublepage
 
 
-## Importância de debate em redes sociais
+### Importância de debates em redes sociais (grupos de whatsapp, Instagram, facebook, etc.)
 
-81 pessoas não responderam esse item e foram removidas da análise deste campo.
+81 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição para importância do debate em redes sociais
+Aproximadamente $70\%$ dos professores consideram importante ou muito importante os debates em redes sociais.
+
+#### Tabela de distribuição para importância debates em redes sociais (grupos de whatsapp, Instagram, facebook, etc.)
 
 ```{r}
 table_distribution(dados, 'k1', 'Importância de debate em redes sociais')
 ```
 
-### Gráfico de barras para importância do debate em redes sociais
+#### Gráfico de barras para importância debates em redes sociais (grupos de whatsapp, Instagram, facebook, etc.)
 
 ```{r}
 grafico(dados, 'k1', 'Importância de debate em\n redes sociais') +
@@ -1446,17 +2046,19 @@ grafico(dados, 'k1', 'Importância de debate em\n redes sociais') +
 
 \cleardoublepage
 
-## Importância da participação das assembleias da APUB
+### Importância de participação das Assembleias do sindicato
 
-75 pessoas não responderam esse item e foram removidas da análise deste campo.
+75 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição para importância das assembleias da apub
+Mais de $80\%$ dos docentes consideram importante ou muito importante a participação de assembléias da APUB.
+
+#### Tabela de distribuição para importância de participação das Assembleias do sindicato
 
 ```{r}
 table_distribution(dados, 'k2', 'Importância das assembleias da APUB')
 ```
 
-### Gráfico de barras para importância das assembleias da apub
+#### Gráfico de barras para importância de participação das Assembleias do sindicato
 
 ```{r}
 grafico(dados, 'k2', 'Importância das assembleias\n da APUB') +
@@ -1465,17 +2067,19 @@ grafico(dados, 'k2', 'Importância das assembleias\n da APUB') +
 
 \cleardoublepage
 
-## Importância dos movimentos sociais
+### Importância de participação de reuniões de movimento social
 
-80 pessoas não responderam esse item e foram removidas da análise deste campo.
+80 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição para importância dos movimentos sociais
+Aproximadamente de $80\%$ dos professores consideraram importante e muito importante a participação de reuniões de movimento social.
+
+#### Tabela de distribuição para importância de participação de reuniões de movimento social
 
 ```{r}
 table_distribution(dados, 'k3', 'Importância dos movimentos sociais')
 ```
 
-### Gráfico de barras para importância dos movimentos sociais
+#### Gráfico de barras para importância de participação de reuniões de movimento social
 
 ```{r}
 grafico(dados, 'k3', 'Importância dos movimento\n sociais') +
@@ -1484,17 +2088,19 @@ grafico(dados, 'k3', 'Importância dos movimento\n sociais') +
 
 \cleardoublepage
 
-## Importância das audiências públicas
+### Importância de presença em Audiências Públicas
 
-86 pessoas não responderam esse item e foram removidas da análise deste campo.
+86 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para a importância das audiências públicas
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a presença em audiência públicas.
+
+#### Tabela de distribuição de frequências para a importância de presença em Audiências Públicas
 
 ```{r}
 table_distribution(dados, 'k4', 'Importância das audiências públicas')
 ```
 
-### gráfico de barras para a importância das audiências públicas
+#### Gráfico de barras para a importância de presença em Audiências Públicas
 
 ```{r}
 grafico(dados, 'k4', 'Importância das audiências\n públicas') +
@@ -1503,36 +2109,40 @@ grafico(dados, 'k4', 'Importância das audiências\n públicas') +
 
 \cleardoublepage
 
-## Importância dos partidos políticos
+### Importância de atuação em partidos políticos
 
-88 pessoas não responderam esse item e foram removidas da análise deste campo.
+88 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância dos partidos políticos
+Aproximadamente $70\%$ dos profesores consideram importante ou muito importante a atuação em partidos políticos. 
+
+#### Tabela de distribuição de frequência para importância de atuação em partidos políticos
 
 ```{r}
 table_distribution(dados, 'k5', 'Importância dos partidos políticos')
 ```
 
-### Gráficos de barras para importância dos partidos políticos
+#### Gráficos de barras para importância de atuação em partidos políticos
 
 ```{r}
-grafico(dados, 'k5', 'Importância dos partidos políticos') +
+grafico(dados, 'k5', 'Importância dos partidos\n políticos') +
   coord_flip()
 ```
 
 \cleardoublepage
 
-## Importância de manifestação de rua
+### Importância de presença em manifestações de rua
 
-78 pessoas não responderam esse item e foram removidas da análise deste campo.
+78 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para manifestação de rua
+Aproximadamente $85\%$ dos professores consideram importante ou muito importante a presença em manifestações de rua.
+
+#### Tabela de distribuição de frequência de presença em manifestações de rua
 
 ```{r}
 table_distribution(dados, 'k6', 'Importância de manifestação de rua')
 ```
 
-### Gráfico de barras para manifestação de rua
+#### Gráfico de barras de presença em manifestações de rua
 
 ```{r}
 grafico(dados, 'k6', 'Importância de manifestação\n de rua') +
@@ -1541,17 +2151,19 @@ grafico(dados, 'k6', 'Importância de manifestação\n de rua') +
 
 \cleardoublepage
 
-## Importância de campanhas eleitorais
+### Importância de contribuição na organização de campanhas eleitorais
 
-92 pessoas não responderam esse item e foram removidas da análise deste campo.
+92 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de campanhas eleitorais
+Aproximadamente $70\%$ dos professores consideram importante ou muito importante a contribuição na organização de campanhas eleitorais.
+
+#### Tabela de distribuição de frequências para importância de contribuição na organização de campanhas eleitorais
 
 ```{r}
 table_distribution(dados, 'k7', 'Importância de campanhas eleitorais')
 ```
 
-### Gráfico de barras para importância de campanhas eleitorais
+#### Gráfico de barras para importância de contribuição na organização de campanhas eleitorais
 
 ```{r}
 grafico(dados, 'k7', 'Importância de campanhas\n eleitorais') +
@@ -1560,17 +2172,19 @@ grafico(dados, 'k7', 'Importância de campanhas\n eleitorais') +
 
 \cleardoublepage
 
-## Importância da APUB
+### Importância de atuação no sindicato docente
 
-87 pessoas não responderam esse item e foram removidas da análise deste campo.
+87 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância da APUB
+Aproximadamente $80\%$ dos respondentes consideraram importante ou muito importante a atuaçõa no sindicato docente.
+
+#### Tabela de distribuição de frequência para importância de atuação no sindicato docente
 
 ```{r}
 table_distribution(dados, 'k8', 'Importância da APUB')
 ```
 
-### Gráfico de barras para importância da APUB
+#### Gráfico de barras para importância de atuação no sindicato docente
 
 ```{r}
 grafico(dados, 'k8', 'Importância da APUB') +
@@ -1579,17 +2193,19 @@ grafico(dados, 'k8', 'Importância da APUB') +
 
 \cleardoublepage
 
-## Importância de eleições em conselhos de controle social
+### Importância de voto nas eleições para conselhos de controle social
 
-88 pessoas não responderam esse item e foram removidas da análise deste campo.
+88 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância de eleições em conselhos de controle social
+Aproximadamente $80\%$ dos professores consideraram importante e muito importante o voto nas eleições para conselhos de controle social.
+
+#### Tabela de distribuição de frequência para importância de voto nas eleições para conselhos de controle social
 
 ```{r}
 table_distribution(dados, 'k9', 'Importância de eleições em conselhos de controle social ')
 ```
 
-### Gráficos de barra para importância de eleições em conselhos de controle social
+#### Gráficos de barra para importância de voto nas eleições para conselhos de controle social
 
 ```{r}
 grafico(dados, 'k9', 'Importância de eleições em\n conselhos de controle social') +
@@ -1598,17 +2214,19 @@ grafico(dados, 'k9', 'Importância de eleições em\n conselhos de controle soci
 
 \cleardoublepage
 
-## Importância dos conselhos profissionais
+### Importância de atuação em associações e conselhos profissionais (CREA, CRENF, CREMEB, etc.)
 
-86 pessoas não responderam esse item e foram removidas da análise deste campo.
+86 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância dos conselhos profissionais
+Aproximadamente $70\%$ dos professores consideraram importante ou muito importante a atuação em associações e conselhos profissionais (CREA, CRENF, CREMEB, etc.).
+
+#### Tabela de distribuição de frequência para importância de atuação em associações e conselhos profissionais (CREA, CRENF, CREMEB, etc.)
 
 ```{r}
 table_distribution(dados, 'k10', 'Importância dos conselhos profissionais')
 ```
 
-### Gráficos de barra para importância dos conselhos profissionais
+#### Gráficos de barra para importância de atuação em associações e conselhos profissionais (CREA, CRENF, CREMEB, etc.)
 
 ```{r}
 grafico(dados, 'k10', 'Importância dos conselhos\n profissionais') +
@@ -1617,17 +2235,19 @@ grafico(dados, 'k10', 'Importância dos conselhos\n profissionais') +
 
 \cleardoublepage
 
-## Importância de conselhos gestores de caráter público
+### Importância de conselhos gestores de caráter público
 
-94 pessoas não responderam esse item e foram removidas da análise deste campo.
+94 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância de conselhos gestores de caráter público
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a participação em  conselhos gestores de caráter público.
+
+#### Tabela de distribuição de frequência para importância de conselhos gestores de caráter público
 
 ```{r}
 table_distribution(dados, 'k11', 'Importância de conselhos gestores de caráter público')
 ```
 
-### Gráfico de barras para importância de conselhos gestores de caráter público
+#### Gráfico de barras para importância de conselhos gestores de caráter público
 
 ```{r}
 grafico(dados, 'k11', 'Importância de conselhos\n gestores de caráter público') +
@@ -1637,17 +2257,19 @@ grafico(dados, 'k11', 'Importância de conselhos\n gestores de caráter público
 
 \cleardoublepage
 
-## Importância de contato com autoridades
+### Importância de contato com autoridades e/ou políticos
 
-93 pessoas não responderam esse item e foram removidas da análise deste campo.
+93 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para Importância de contato com autoridades
+Aproximadamente $70\%$ dos professores consideraram importante ou muito importante o contato com autoridades e/ou políticos
+
+#### Tabela de distribuição de frequências para Importância de contato com autoridades e/ou políticos
 
 ```{r}
 table_distribution(dados, 'k12', 'Importância de contato com autoridades')
 ```
 
-### Gráfico de barras para Importância de contato com autoridades
+#### Gráfico de barras para Importância de de contato com autoridades e/ou políticos
 
 ```{r}
 grafico(dados, 'k12', 'Importância de contato com\n autoridades') +
@@ -1656,17 +2278,20 @@ grafico(dados, 'k12', 'Importância de contato com\n autoridades') +
 
 \cleardoublepage
 
-## Importância da participação em eventos de Organizações da Sociedade Civil
+### Importância da participação em eventos de Organizações da Sociedade Civil (OSC)
 
-88 pessoas não responderam esse item e foram removidas da análise deste campo.
+88 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para Importância da participação em eventos de Organizações da Sociedade Civil
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a participação em eventos de Organizações da Sociedade Civil (OSC)
+
+
+#### Tabela de distribuição de frequências para Importância da participação em eventos de Organizações da Sociedade Civil (OSC)
 
 ```{r}
 table_distribution(dados, 'k13', 'Importância da participação em eventos de Organizações da Sociedade Civil')
 ```
 
-### Gráfico de barras para Importância da participação em eventos de Organizações da Sociedade Civil
+#### Gráfico de barras para Importância da participação em eventos de Organizações da Sociedade Civil (OSC)
 
 ```{r}
 grafico(dados, 'k13', 'Importância da participação em\n eventos de Organizações da\n Sociedade Civil') +
@@ -1674,17 +2299,22 @@ grafico(dados, 'k13', 'Importância da participação em\n eventos de Organizaç
   coord_flip()
 ```
 
-## Importância da Composição de Associações sem fins lucrativos
+\cleardoublepage
 
-92 pessoas não responderam esse item e foram removidas da análise deste campo.
+### Importância da composição de Associações sem fins lucrativos
 
-### Tabela de distribuição de frequências para Importância da Composição de Associações sem fins lucrativos
+92 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
+
+Aproximadamente $75\%$ dos professores consideraram importante ou muito importante a composição de Associações sem fins lucrativos.
+
+
+#### Tabela de distribuição de frequências para Importância da Composição de Associações sem fins lucrativos
 
 ```{r}
 table_distribution(dados, 'k14', 'Importância da Composição de Associações sem fins lucrativos')
 ```
 
-### Gráficos de barras para Importância da Composição de Associações sem fins lucrativos
+#### Gráficos de barras para Importância da Composição de Associações sem fins lucrativos
 
 ```{r}
 grafico(dados, 'k14', 'Importância da Composição de\n Associações sem fins\n lucrativos') +
@@ -1696,7 +2326,20 @@ grafico(dados, 'k14', 'Importância da Composição de\n Associações sem fins\
 
 ## Atividades políticas na Universidade
 
-Campo do tipo _caixa de seleção_.
+A variável _atividades políticas na universidade_ corresponde a questão de número 40 que é do tipo _caixa de seleção_. Neste caso, podemos apenas contar quantas vezes cada opção foi selecionada. 
+
+Alguns textos das opções da questão de número 40 são muito longos, e usei um texto abreviado para facilitar a visualização da tabela de distribuição de frequência e o gráfico de barras como indico na tabela abaixo.
+
+|Textos originais|Textos abreviados|
+|:---------------------------|:-------------------------|
+|Participo (faz campanha, acompanha debates) das eleições para Reitoria|Participo das eleições para Reitoria|
+|Voto em eleições da Reitoria.|Voto nas eleições para Reitoria|
+|Participo (faz campanha, acompanha debates) das eleições para Diretoria da Unidade.|Participo das eleição para Diretoria de Unidade|
+|Voto nas eleições para Diretoria da Unidade.|Voto das eleição para Diretoria de Unidade|
+|Faço parte de um coletivo dentro da Universidade.|Faço parte de um coletivo|
+|Participo de eleições para Representantes em Conselhos Superiores.|Participo de eleições para Conselhos Superiores|
+|Assino manifestos dentro da Universidade.|Assino manifestos dentro da Universidade|
+|Participação nas atividades (GT’s, Assembléias, Votações, Mobilizações) do sindicato.|Participo das atividades da APUB|
 
 ### Tabela de distribuição de frequência para Atividades políticas na Universidade
 
@@ -1730,17 +2373,23 @@ ggplot(df) +
 
 \cleardoublepage
 
-## Importância de reuniões públicas
+## Grau de importância das ações organizadas pela APUB
 
-103 pessoas não responderam esse item e foram removidas da análise deste campo.
+Neste campo, temos diversos aspectos das ações políticas organizadas pela APUB. Eu decidi criar uma tabela de distribuição de frequência e gráfico de barras para cada um destes aspectos, e fazer uma interpretação simplicada de cada um deste aspectos. 
 
-### Tabela de distribuição de frequências para Importância de reuniões públicas
+### Importância de reuniões públicas
+
+103 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
+
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante as reuniões públicas.
+
+#### Tabela de distribuição de frequências para Importância de reuniões públicas
 
 ```{r}
 table_distribution(dados, 'Qual.a.importância.você.atribui.às.ações.organizadas.pela.APUB..RESPONDER.FILIADOS.AS.E.NÃO.FILIADOS.AS.', 'Importância de reuniões públicas')
 ```
 
-### Gráfico de barras para Importância de reuniões públicas
+#### Gráfico de barras para Importância de reuniões públicas
 
 ```{r}
 grafico(dados, 'Qual.a.importância.você.atribui.às.ações.organizadas.pela.APUB..RESPONDER.FILIADOS.AS.E.NÃO.FILIADOS.AS.', 'Importância de reuniões\n públicas') +
@@ -1750,17 +2399,19 @@ grafico(dados, 'Qual.a.importância.você.atribui.às.ações.organizadas.pela.A
 
 \cleardoublepage
 
-## Importância de debate sobre conjuntura
+### Importância de debates públicos sobre a conjuntura nacional e internacional.
 
-92 pessoas não responderam esse item e foram removidas da análise deste campo.
+92 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância de debate sobrea a conjuntura
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante os debates públicos sobre a conjuntura nacional e internacional.
+
+#### Tabela de distribuição de frequência para importância de debates públicos sobre a conjuntura nacional e internacional
 
 ```{r}
 table_distribution(dados, 'm1', 'Importância de Debate sobre conjuntura')
 ```
 
-### Gráfico de barras para importância de debate sobrea a conjuntura
+#### Gráfico de barras para importância de debates públicos sobre a conjuntura nacional e internacional
 
 ```{r}
 grafico(dados, 'm1', 'Importância de Debate sobre\n conjuntura') +
@@ -1769,17 +2420,20 @@ grafico(dados, 'm1', 'Importância de Debate sobre\n conjuntura') +
 
 \cleardoublepage
 
-## Importância das assembleias docentes
+### Importância das assembleias docentes
 
-84 pessoas não responderam esse item e foram removidas da análise deste campo.
+84 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância das assembleias docentes
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante as assembleias docentes.
+
+
+#### Tabela de distribuição de frequências para importância das assembleias docentes
 
 ```{r}
 table_distribution(dados, 'm2', 'Importância das assembleias docentes')
 ```
 
-### Gráfico de barras para importância das assembleias docentes
+#### Gráfico de barras para importância das assembleias docentes
 
 ```{r}
 grafico(dados, 'm2', 'Importância das assembleias\n docentes') +
@@ -1789,17 +2443,20 @@ grafico(dados, 'm2', 'Importância das assembleias\n docentes') +
 
 \cleardoublepage
 
-## Importância de mobilizações
+### Importância de mobilizações de caráter público (atos, protestos e paralisação).
 
-86 pessoas não responderam esse item e foram removidas da análise deste campo.
+86 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de mobilizações
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante as mobilizações de caráter público (atos, protestos e paralisação).
+
+
+#### Tabela de distribuição de frequências para importância de mobilizações de caráter público (atos, protestos e paralisação).
 
 ```{r}
 table_distribution(dados, 'm3', 'Importância de mobilizações')
 ```
 
-### Gráfico de barras para importância das mobilizações
+#### Gráfico de barras para importância de mobilizações de caráter público (atos, protestos e paralisação).
 
 ```{r}
 grafico(dados, 'm3', 'Importância de mobilizações') +
@@ -1808,34 +2465,42 @@ grafico(dados, 'm3', 'Importância de mobilizações') +
 
 \cleardoublepage
 
-## Importância de greve
+### Importância de greve da categoria docente.
 
-91 pessoas não responderam esse item e foram removidas da análise deste campo.
+91 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequência para importância de greve
+Aproximadamente $70\%$ dos professores consideraram importante ou muito importante a greve da categoria docente.
+
+
+#### Tabela de distribuição de frequência para importância de greve da categoria docente.
 
 ```{r}
 table_distribution(dados, 'm4', 'Importância de greve')
 ```
 
-### Gráfico de barras para importância de greve
+#### Gráfico de barras para importância de greve da categoria docente.
 
 ```{r}
 grafico(dados, 'm4', 'Importância de greve') +
   coord_flip()
 ```
 
-## Importância de debates sobre carreira
+\cleardoublepage
 
-84 pessoas não responderam esse item e foram removidas da análise deste campo.
+### Importância de encontros e debates sobre a carreira docente.
 
-### Tabela de distribuição de frequência para importância de debates sobre carreira
+84 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
+
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante os encontros e debates sobre a carreira docente.
+
+
+#### Tabela de distribuição de frequência para importância de encontros e debates sobre a carreira docente.
 
 ```{r}
 table_distribution(dados, 'm5', 'Importância de debates sobre carreira')
 ```
 
-### Gráfico de barras para importância de debates sobre carreira
+#### Gráfico de barras para importância de encontros e debates sobre a carreira docente.
 
 ```{r}
 grafico(dados, 'm5', 'Importância de debates sobre\n carreira') +
@@ -1844,17 +2509,20 @@ grafico(dados, 'm5', 'Importância de debates sobre\n carreira') +
 
 \cleardoublepage
 
-## Eventos culturais
+### Eventos culturais
 
-89 pessoas não responderam esse item e foram removidas da análise deste campo.
+89 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências sobre a importância de eventos culturais
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante os eventos culturais.
+
+
+#### Tabela de distribuição de frequências sobre a importância de eventos culturais
 
 ```{r}
 table_distribution(dados, 'm6', 'Importância de eventos culturais')
 ```
 
-### Gráfico de barras sobre a importância de eventos culturais
+#### Gráfico de barras sobre a importância de eventos culturais
 
 ```{r}
 grafico(dados, 'm6', 'Importância de eventos\n culturais') +
@@ -1863,17 +2531,19 @@ grafico(dados, 'm6', 'Importância de eventos\n culturais') +
 
 \cleardoublepage
 
-## Importância de atividades em outras entidades
+### Importância de participar de atividades sindicais de outras entidades (Centrais, Federações, etc.).
 
-90 pessoas não responderam esse item e foram removidas da análise deste campo.
+90 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de atividade em outras entidades
+Aproximadamente $70\%$ dos professores consideraram importante ou muito importante a participação de atividades sindicais de outras entidades (Centrais, Federações, etc.).
+
+#### Tabela de distribuição de frequências para importância de participar de atividades sindicais de outras entidades (Centrais, Federações, etc.).
 
 ```{r}
 table_distribution(dados, 'm7', 'Importância de atividades em outras entidades')
 ```
 
-### Gráfico de barras para importância de atividade em outras entidades
+#### Gráfico de barras para importância de participar de atividades sindicais de outras entidades (Centrais, Federações, etc.).
 
 ```{r}
 grafico(dados, 'm7', 'Importância de atividades em\n outras entidades') +
@@ -1882,17 +2552,19 @@ grafico(dados, 'm7', 'Importância de atividades em\n outras entidades') +
 
 \cleardoublepage
 
-## Importância de convênios
+### Importância de convênios (descontos em lojas e serviços).
 
-89 pessoas não responderam esse item e foram removidas da análise deste campo.
+89 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de convênios
+Aproximadamente $70\%$ dos professores consideraram importante ou muito importante os  convênios (descontos em lojas e serviços).
+
+#### Tabela de distribuição de frequências para importância de convênios (descontos em lojas e serviços).
 
 ```{r}
 table_distribution(dados, 'm8', 'Importância de convênios')
 ```
 
-### Gráfico de barras para importância de convênios
+#### Gráfico de barras para importância de convênios (descontos em lojas e serviços).
 
 ```{r}
 grafico(dados, 'm8', 'Importância de convênios') +
@@ -1901,17 +2573,20 @@ grafico(dados, 'm8', 'Importância de convênios') +
 
 \cleardoublepage
 
-## Importância da assessoria jurídica
+### Importância da assessoria jurídica
 
-90 pessoas não responderam esse item e foram removidas da análise deste campo.
+90 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância da assessoria jurídica
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante a assessoria jurídica.
+
+
+#### Tabela de distribuição de frequências para importância da assessoria jurídica
 
 ```{r}
 table_distribution(dados, 'm9', 'Importância da assessoria jurídica')
 ```
 
-### Gráfico de barras para importância da assessoria jurídica
+#### Gráfico de barras para importância da assessoria jurídica
 
 ```{r}
 grafico(dados, 'm9', 'Importância da assessoria\n jurídica') +
@@ -1921,17 +2596,20 @@ grafico(dados, 'm9', 'Importância da assessoria\n jurídica') +
 
 \cleardoublepage
 
-## Importância de atividades de cuidado
+### Importância de atividades de cuidado, qualidade de vida e acolhimento
 
-90 pessoas não responderam esse item e foram removidas da análise deste campo.
+90 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de atividade de cuidado
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante atividades de cuidado, qualidade de vida e acolhimento.
+
+
+#### Tabela de distribuição de frequências para importância de atividades de cuidado, qualidade de vida e acolhimento
 
 ```{r}
 table_distribution(dados, 'm10', 'Importância de atividades de cuidado')
 ```
 
-### Gráfico de barras para importância de atividades de cuidado
+#### Gráfico de barras para importância de atividades de cuidado, qualidade de vida e acolhimento
 
 ```{r}
 grafico(dados, 'm10', 'Importância  de atividades\n de cuidado') +
@@ -1940,17 +2618,20 @@ grafico(dados, 'm10', 'Importância  de atividades\n de cuidado') +
 
 \cleardoublepage
 
-## Importância de plano de saúde
+### Importância de plano de saúde
 
-91 pessoas não responderam esse item e foram removidas da análise deste campo.
+91 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de plano de saúde
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante o plano de saúde.
+
+
+#### Tabela de distribuição de frequências para importância de plano de saúde
 
 ```{r}
 table_distribution(dados, 'm11', 'Importância de plano de saúde')
 ```
 
-### Gráfico de barras para importância de plano de saúde
+#### Gráfico de barras para importância de plano de saúde
 
 ```{r}
 grafico(dados, 'm11', 'Importância de plano de saúde') +
@@ -1960,17 +2641,19 @@ grafico(dados, 'm11', 'Importância de plano de saúde') +
 
 \cleardoublepage
 
-## Importância de aliança/apoio a movimentos sociais
+### Importância de aliança/apoio a movimentos sociais
 
-88 pessoas não responderam esse item e foram removidas da análise deste campo.
+88 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de aliança/apoio a movimentos sociais
+Aproximadamente $85\%$ dos professores consideraram importante ou muito importante a alianças e apoio a movimentos sociais.
+
+#### Tabela de distribuição de frequências para importância de aliança/apoio a movimentos sociais
 
 ```{r}
 table_distribution(dados, 'm12', 'Importância de aliança/apoio a movimentos sociais')
 ```
 
-### Gráfico de barras para importância de aliança/apoio a movimentos sociais
+#### Gráfico de barras para importância de aliança/apoio a movimentos sociais
 
 ```{r}
 grafico(dados, 'm12', 'Importância de aliança/apoio\n a movimentos sociais') +
@@ -1979,17 +2662,20 @@ grafico(dados, 'm12', 'Importância de aliança/apoio\n a movimentos sociais') +
 
 \cleardoublepage
 
-## Importância de divulgação de atividades científicas
+### Importância de divulgação e comunicação de atividades científicas.
 
-89 pessoas não responderam esse item e foram removidas da análise deste campo.
+89 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de divulgação de atividades científicas
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante a divulgação e comunicação de atividades científicas.
+
+
+#### Tabela de distribuição de frequências para importância de divulgação e comunicação de atividades científicas.
 
 ```{r}
 table_distribution(dados, 'm13', 'Importância de divulgação de atividades científicas')
 ```
 
-### Gráfico de barras para importância de divulgação de atividades científicas
+#### Gráfico de barras para importância de divulgação e comunicação de atividades científicas.
 
 ```{r}
 grafico(dados, 'm13', 'Importância de divulgação\n de atividades científicas') +
@@ -1998,17 +2684,20 @@ grafico(dados, 'm13', 'Importância de divulgação\n de atividades científicas
 
 \cleardoublepage
 
-## Importância de apoio financeiro a ações políticas
+### Importância de apoio financeiro a eventos e ações sociais/políticas
 
-91 pessoas não responderam esse item e foram removidas da análise deste campo.
+91 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de apoio financeiro a ações políticas
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante o apoio financeiro a eventos e ações sociais/políticas.
+
+
+#### Tabela de distribuição de frequências para importância de apoio financeiro a eventos e ações sociais/políticas
 
 ```{r}
 table_distribution(dados, 'm14', 'Importância de apoio financeiro a ações políticas')
 ```
 
-### Gráficos de barras para importância de apoio financeiro a ações políticas
+#### Gráficos de barras para importância de apoio financeiro a eventos e ações sociais/políticas
 
 ```{r}
 grafico(dados, 'm14', 'Importância de apoio\n financeiro a ações políticas')+
@@ -2017,17 +2706,20 @@ grafico(dados, 'm14', 'Importância de apoio\n financeiro a ações políticas')
 
 \cleardoublepage
 
-## Importância de apoio financeiro a ações acadêmicas
+### Importância de apoio financeiro a eventos e ações acadêmicas e publicações
 
-92 pessoas não responderam esse item e foram removidas da análise deste campo.
+92 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de apoio financeiro a ações acadêmicas
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante o apoio financeiro a eventos e ações acadêmicas e publicações.
+
+
+#### Tabela de distribuição de frequências para importância de apoio financeiro a eventos e ações acadêmicas e publicações
 
 ```{r}
 table_distribution(dados, 'm15', 'Importância de apoio financeiro a ações acadêmicas')
 ```
 
-### Gráfico de barras para importância de apoio financeiro a ações acadêmicas
+#### Gráfico de barras para importância de apoio financeiro a eventos e ações acadêmicas e publicações
 
 ```{r}
 grafico(dados, 'm15', 'Importância de apoio financeiro\n a ações acadêmicas') +
@@ -2037,17 +2729,19 @@ grafico(dados, 'm15', 'Importância de apoio financeiro\n a ações acadêmicas'
 
 \cleardoublepage
 
-## Importância da organização das eleições para Reitoria.
+### Importância da organização das eleições para Reitoria.
 
-95 pessoas não responderam esse item e foram removidas da análise deste campo.
+95 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância da organização das eleições para Reitoria
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a organização das eleições para Reitoria.
+
+#### Tabela de distribuição de frequências para importância da organização das eleições para Reitoria
 
 ```{r}
 table_distribution(dados, 'm16', 'Importância da organização das eleições para Reitoria')
 ```
 
-### Gráfico de barras para importância da organização das eleições para Reitoria
+#### Gráfico de barras para importância da organização das eleições para Reitoria
 
 ```{r}
 grafico(dados, 'm16', 'Importância da organização\n das eleições para Reitoria') +
@@ -2056,55 +2750,63 @@ grafico(dados, 'm16', 'Importância da organização\n das eleições para Reito
 
 \cleardoublepage
 
-## Importância de participar em comissões eleitorais universitárias
+### Importância de participar em comissões eleitorais universitárias
 
-98 pessoas não responderam esse item e foram removidas da análise deste campo.
+98 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de participar em comissões eleitorais universitárias
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a participação em comissões eleitorais universitárias
+
+#### Tabela de distribuição de frequências para importância de participar em comissões eleitorais universitárias
 
 ```{r}
 table_distribution(dados, 'm17', 'Importância de participar em comissões eleitorais universitárias')
 ```
 
-### Gráfico de barras para importância de participar em comissões eleitorais universitárias
+#### Gráfico de barras para importância de participar em comissões eleitorais universitárias
 
 ```{r}
-grafico(dados, 'm17', 'Importância de participar em\n comissões eleitorais universitárias') +
+grafico(dados, 'm17', 'Importância de participar em\n comissões eleitorais\n universitárias') +
   coord_flip()
 ```
 
 \cleardoublepage
 
-## Importância de indicar membros de OSC
+### Importância de indicar membros (docentes) para Conselhos e Organizações da Sociedade Civil;
 
-91 pessoas não responderam esse item e foram removidas da análise deste campo.
+91 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de indicar membros OSC
+Aproximadamente $90\%$ dos professores consideraram importante ou muito importante a indicação de membros (docentes) para Conselhos e Organizações da Sociedade.
+
+
+#### Tabela de distribuição de frequências para importância de indicar membros (docentes) para Conselhos e Organizações da Sociedade
 
 ```{r}
 table_distribution(dados, 'm18', 'Importância de indicar membros de OSC')
 ```
 
-### Gráfico de barras para importância de indicar membros OSC
+#### Gráfico de barras para importância de indicar membros (docentes) para Conselhos e Organizações da Sociedade
 
 ```{r}
-grafico(dados, 'm18', 'Importância de indicar membros\n de OSC') +
+grafico(dados, 'm18', 'Importância de indicar\n membros de OSC') +
   coord_flip()
 ```
 
 \cleardoublepage
 
-## Importância da formação política+sindical
+### Importância da formação política e/ou sindical (cursos e palestras).
 
-92 pessoas não responderam esse item e foram removidas da análise deste campo.
+92 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
 
-### Tabela de distribuição de frequências para importância de formação política+sindical
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante a formação política e/ou sindical (cursos e palestras).
+
+
+#### Tabela de distribuição de frequências para importância de formação política e/ou sindical (cursos e palestras).
 
 ```{r}
 table_distribution(dados, 'm19', 'Importância da formação política+sindical')
 ```
 
-### Gráfico de barras para importância de formação política+sindical
+#### Gráfico de barras para importância de formação política e/ou sindical (cursos e palestras).
 
 ```{r}
 grafico(dados, 'm19', 'Importância da formação\n política+sindical') +
@@ -2113,9 +2815,47 @@ grafico(dados, 'm19', 'Importância da formação\n política+sindical') +
 
 \cleardoublepage
 
+### Importância de organizar a eleição de Representantes docentes aos conselhos superiores
+
+94 pessoas não responderam esse item e foram desconsideradas da análise descritiva deste campo.
+
+Aproximadamente $80\%$ dos professores consideraram importante ou muito importante organizar a eleição de Representantes docentes aos conselhos superiores.
+
+
+#### Tabela de distribuição de frequências para importância de organizar a eleição de Representantes docentes aos conselhos superiores
+
+```{r}
+table_distribution(dados, 'm20', 'Importância da formação política+sindical')
+```
+
+#### Gráfico de barras para importância de organizar a eleição de Representantes docentes aos conselhos superiores
+
+```{r}
+grafico(dados, 'm20', 'Importância da formação\n política+sindical') +
+  coord_flip()
+```
+
+
+\cleardoublepage
+
 ## Prioridades da UFBA
 
-Campo do tipo _caixa de seleção_.
+A variável _prioridades da UFBA_ é a questão de número 42 que é um campo do tipo _caixa de seleção_. Neste caso, a única possibildiade é contar quantas vezes cada opção foi selecionada pelos respondentes.
+
+Alguns textos das opções da questão de número 42 são muitos longos, e para facilitar a visualização na tabela de distribuição de frequências e no gráfico de barras optei por usar uma texto abreviado conforme tabela abaixo.
+
+|Texto original|Texto abreviado|
+|:-------------------------|:--------------------------------|
+|Defesa da Universidade e da carreira docente.|Defesa da Universidade e carreira|
+|Criação de parcerias e convênios.|Criação de parcerias e convênios|
+|Novos canais de comunicação e divulgação das ações.|Novos canais de comunicação|
+|Parceria com corretoras de Plano de Saúde.|Plano de saúde|
+|Reformulação e qualificação da Assessoria Jurídica.|Assessoria jurídica|
+|Valorização da Extensão.|Valorização da extensão|
+|Conquistas coletivas, salariais e de progressão de carreira.|Conquistas coletivas e salariais|
+|Ampliar a participação política.|Ampliar participação política|
+|Realizar cursos de formação sindical.|Cursos de formação sindical|
+|Organizar atendimentos para cuidado e saúde docente.|Cuidado e saúde docente|
 
 ### Tabela de distribuição de frequências para Prioridades da UFBA
 
@@ -2152,7 +2892,20 @@ ggplot(df) +
 
 ## Filiação partidária
 
-66 pessoas não responderam se possui filiação partidária.
+66 pessoas não responderam se possui filiação partidária e não foram consideradas na análise descritiva desta variável.
+
+Quase $90\%$ dos respondentes não estão filiados e não tem interesse em se filiar em partidos políticos.
+
+A variável _filiação partidária_ corresponde a questão de número 43 com enunciado:
+
+> Você possui vínculo/filiação com algum partido político?
+> 
+> - Não sou filiado.
+> - Sou filiado.
+> - Já fui filiado.
+> - Não tenho interesse em me filiar.
+> - Não sabe.
+> - Prefiro não responder.
 
 ### Tabela de distribuição de frequências para Filiação partidária
 
@@ -2173,7 +2926,18 @@ grafico(dados, 'Você.possui.vínculo.filiação.com.algum.partido.político.', 
 
 ## Participação de movimentos sociais
 
-66 pessoas não responderam se participa dos movimentos sociais.
+66 pessoas não responderam se participa dos movimentos sociais, e foram desconsiderados na análise descritiva desta varipavel.
+
+Aproximadamente $60\%$ dos respondentes não participam de movimentos sociais.
+
+A variável _participação de movimentos sociais_ corresponde a questão de número 44 cujo enunciado é dado por:
+
+> Você participa de maneira orgânica de movimentos sociais? (ambientalista, feminista, sindical, antirracista, etc.)
+> 
+> - Não.
+> - Sim.
+> - Prefiro não responder.
+
 
 ### Tabela de distribuição de frequências para participação de movimentos sociais
 
@@ -2190,41 +2954,4 @@ grafico(dados, 'Você.participa.de.maneira.orgânica.de.movimentos.sociais....am
 
 ```
 
-\cleardoublepage
-
-## Graduação
-
-Retirei o campo _ Outros._ e quem não repondeu a pergunta: um total de 24 pessoas.
-
-Tem um total de 75 cursos, então agrupei os cursos pela área do conhecimento.
-
-### Tabela de distribuição de frequências para Graduação
-
-```{r}
-df <- dados %>% 
-  select(Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.) %>% 
-  rename('Graduação' = 'Qual.a.sua.principal.graduação.cursada..Caso.tenha.mais.de.uma..indique.a.mais.importante.para.a.sua.carreira.docente.') %>% 
-  filter(`Graduação` != '' & `Graduação` != 'Outro.')
-
-area_conhecimento <- read.xlsx('bolsista/cursos.xlsx')
-
-area_conhecimento <- area_conhecimento %>% 
-  rename(
-    'Graduação' = 'Cursos.de.graduação',
-    'UFBA' = 'Área.de.concentração.-.UFBA',
-    'CAPES' = 'Áreas.do.conhecimento.-.CAPES'
-  )
-
-df <- df %>% left_join(area_conhecimento, by = 'Graduação')
-
-table_distribution(df, 'CAPES', 'Área do conhecimento - CAPES')
-
-```
-
-### Gráfico de barras para Graduação
-
-```{r}
-grafico(df, 'CAPES', 'Área do conhecimento\n CAPES') +
-  coord_flip()
-```
 
